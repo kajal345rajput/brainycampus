@@ -1,0 +1,246 @@
+/* ----------------- Global ----------------- */
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Montserrat',sans-serif;
+  scroll-behavior:smooth;
+}
+body{
+  background:#f4f6fb;
+  color:#333;
+}
+
+/* ----------------- LOGIN PAGE ----------------- */
+.login-container{
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:linear-gradient(135deg,#1a237e,#3949ab);
+}
+.login-box{
+  background:white;
+  padding:40px;
+  width:360px;
+  border-radius:12px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.15);
+  text-align:center;
+}
+.login-box h2{
+  margin-bottom:25px;
+}
+.input-group{
+  margin-bottom:18px;
+}
+.input-group input{
+  width:100%;
+  padding:12px;
+  border:1px solid #ddd;
+  border-radius:8px;
+  outline:none;
+}
+.input-group input:focus{
+  border-color:#10a37f;
+}
+.login-btn{
+  width:100%;
+  padding:12px;
+  background:#10a37f;
+  color:white;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+}
+.login-btn:hover{
+  background:#0e8c6d;
+}
+.secondary-btn{
+  margin-top:15px;
+  background:none;
+  border:none;
+  color:#555;
+  cursor:pointer;
+}
+.toggle-password{
+  font-size:12px;
+  color:#10a37f;
+  cursor:pointer;
+  margin-top:5px;
+}
+
+/* ----------------- MAIN PAGE ----------------- */
+.main-page{
+  display:none;
+}
+
+/* ----------------- HEADER ----------------- */
+header{
+  background:#1a237e;
+  color:white;
+  padding:15px 40px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  position:sticky;
+  top:0;
+  z-index:10;
+}
+
+nav{
+  display:flex;
+  gap:20px;
+}
+
+nav a{
+  color:white;
+  text-decoration:none;
+  font-weight:600;
+  font-size:16px;
+}
+
+nav a:hover{
+  color:#f7c948;
+}
+
+.logout-btn{
+  background:#ff5252;
+  border:none;
+  padding:8px 15px;
+  border-radius:6px;
+  color:white;
+  cursor:pointer;
+}
+.logout-btn:hover{
+  background:#e03e3e;
+}
+
+/* ----------------- HERO ----------------- */
+.hero{
+  height:90vh;
+  background:url('https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1470&q=80') no-repeat center center/cover;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  color:white;
+  position:relative;
+}
+.hero::after{
+  content:'';
+  position:absolute;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.6);
+  top:0;
+  left:0;
+}
+.hero-content{
+  position:relative;
+  z-index:2;
+  max-width:700px;
+}
+.hero h1{
+  font-size:42px;
+  margin-bottom:15px;
+}
+.hero p{
+  margin-bottom:20px;
+}
+.hero button{
+  padding:12px 25px;
+  border:none;
+  background:#f7c948;
+  border-radius:25px;
+  cursor:pointer;
+}
+.hero button:hover{
+  transform:scale(1.05);
+}
+
+/* ----------------- SECTIONS ----------------- */
+section{
+  padding:60px 80px;
+}
+section h2{
+  text-align:center;
+  font-size:32px;
+  color:#1a237e;
+  margin-bottom:20px;
+}
+
+/* ----------------- FEATURES ----------------- */
+.features{
+  background:#f9fafc;
+}
+
+/* Cards */
+.cards{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:30px;
+}
+
+.card{
+  background:white;
+  padding:30px;
+  border-radius:15px;
+  text-align:center;
+  box-shadow:0 10px 25px rgba(0,0,0,0.1);
+  transition:0.3s;
+}
+.card:hover{
+  transform:translateY(-10px);
+  box-shadow:0 15px 35px rgba(0,0,0,0.2);
+}
+
+.icon{
+  font-size:40px;
+  margin-bottom:10px;
+}
+
+.card h3{
+  margin:10px 0;
+  color:#1a237e;
+}
+
+.card p{
+  font-size:14px;
+  color:#555;
+}
+
+/* ----------------- MODULE CONTAINER ----------------- */
+.module-container{
+  padding:20px;
+  margin:30px auto;
+  max-width:800px;
+  background:white;
+  border-radius:12px;
+  box-shadow:0 10px 20px rgba(0,0,0,0.1);
+}
+
+/* ----------------- FOOTER ----------------- */
+footer{
+  background:#1a237e;
+  color:white;
+  text-align:center;
+  padding:20px;
+  margin-top:40px;
+}
+
+/* ----------------- RESPONSIVE ----------------- */
+@media(max-width:768px){
+  header{
+    flex-direction:column;
+    gap:10px;
+  }
+  nav{
+    margin:0;
+  }
+  section{
+    padding:40px 20px;
+  }
+  .hero h1{
+    font-size:28px;
+  }
+}
