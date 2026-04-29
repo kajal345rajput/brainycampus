@@ -5,7 +5,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY
 SECRET_KEY = os.environ.get('SECRET_KEY', 'dev-secret-key')
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
     'brainycampus-5.onrender.com',
