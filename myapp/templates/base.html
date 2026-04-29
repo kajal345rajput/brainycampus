@@ -1,0 +1,39 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Academic Organizer</title>
+
+  <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="logo">🎓 Student Academic Organizer</div>
+
+  <nav>
+    <a href="#home">Home</a>
+    <a href="#features">Features</a>
+  </nav>
+
+  {% if request.user.is_authenticated %}
+    <a href="{% url 'logout' %}">
+      <button class="logout-btn">Logout</button>
+    </a>
+  {% endif %}
+</header>
+
+<!-- PAGE CONTENT -->
+{% block content %}{% endblock %}
+
+<!-- FOOTER -->
+<footer>
+  © 2026 Student Academic Organizer
+</footer>
+
+</body>
+</html>
