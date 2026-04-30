@@ -10,85 +10,89 @@
   </div>
 </section>
 
+{% if user.is_authenticated %}
+
 <!-- FEATURES SECTION -->
 <section class="features" id="features">
   <h2>Core Modules</h2>
 
   <div class="cards">
 
-    <div class="card">
+    <a href="{% url 'timetable' %}" class="card">
       <div class="icon">📅</div>
       <h3>Timetable Manager</h3>
       <p>Organize daily classes efficiently.</p>
-    </div>
+    </a>
 
-    <div class="card">
+    <a href="{% url 'assignments' %}" class="card">
       <div class="icon">📝</div>
       <h3>Assignment Tracker</h3>
       <p>Track due dates and submission status.</p>
-    </div>
+    </a>
 
-    <div class="card">
+    <a href="{% url 'attendance' %}" class="card">
       <div class="icon">📊</div>
       <h3>Attendance Tracker</h3>
       <p>Monitor attendance percentage.</p>
-    </div>
+    </a>
 
-    <div class="card">
+    <a href="{% url 'notes' %}" class="card">
       <div class="icon">📚</div>
       <h3>Notes Section</h3>
       <p>Store short and quick notes.</p>
-    </div>
+    </a>
 
-    <div class="card">
+    <a href="{% url 'notebook' %}" class="card">
       <div class="icon">📒</div>
       <h3>Notebook</h3>
       <p>Maintain detailed lecture notes.</p>
-    </div>
+    </a>
 
-    <div class="card">
+    <a href="{% url 'exam_planner' %}" class="card">
       <div class="icon">🧪</div>
       <h3>Exam Planner</h3>
       <p>Manage exam schedules and subjects.</p>
-    </div>
+    </a>
 
-    <div class="card">
+    <a href="{% url 'study_tracker' %}" class="card">
       <div class="icon">⏱</div>
       <h3>Study Tracker</h3>
       <p>Track daily study hours.</p>
-    </div>
+    </a>
 
-    <div class="card">
+    <a href="{% url 'todo' %}" class="card">
       <div class="icon">✅</div>
       <h3>To-Do List</h3>
       <p>Track pending academic tasks.</p>
-    </div>
+    </a>
 
-    <div class="card">
+    <a href="{% url 'grades' %}" class="card">
       <div class="icon">🎯</div>
       <h3>Grade Tracker</h3>
       <p>Monitor marks and performance.</p>
-    </div>
+    </a>
 
-    <div class="card">
+    <a href="{% url 'library' %}" class="card">
       <div class="icon">📖</div>
       <h3>Library Tracker</h3>
       <p>Manage borrowed books and returns.</p>
-    </div>
+    </a>
 
-    <div class="card">
+    <a href="{% url 'events' %}" class="card">
       <div class="icon">📅</div>
       <h3>Event Calendar</h3>
       <p>Track events, seminars, and deadlines.</p>
-    </div>
+    </a>
 
-    <div class="card">
+    <a href="{% url 'reminders' %}" class="card">
       <div class="icon">⏰</div>
       <h3>Reminder System</h3>
       <p>Set reminders for tasks and exams.</p>
-    </div>
+    </a>
 
   </div>
 </section>
+
+{% endif %}
 
 {% endblock %}

@@ -1,11 +1,14 @@
 from pathlib import Path
 import os
 
+# ---------------- BASE ---------------- #
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# SECURITY
+# ---------------- SECURITY ---------------- #
 SECRET_KEY = os.environ.get('SECRET_KEY', 'dev-secret-key')
-DEBUG = False
+
+# Toggle DEBUG via environment variable
+DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
 ALLOWED_HOSTS = [
     'brainycampus-5.onrender.com',
@@ -19,7 +22,7 @@ CSRF_TRUSTED_ORIGINS = [
     'https://*.onrender.com'
 ]
 
-# APPLICATIONS
+# ---------------- APPLICATIONS ---------------- #
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -30,7 +33,7 @@ INSTALLED_APPS = [
     'myapp',
 ]
 
-# MIDDLEWARE
+# ---------------- MIDDLEWARE ---------------- #
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
@@ -44,11 +47,11 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'brainycampus.urls'
 
-# TEMPLATES
+# ---------------- TEMPLATES ---------------- #
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],
+        'DIRS': [BASE_DIR / 'templates'],  # global templates folder
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -62,7 +65,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'brainycampus.wsgi.application'
 
-# DATABASE
+# ---------------- DATABASE ---------------- #
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -70,7 +73,7 @@ DATABASES = {
     }
 }
 
-# PASSWORD VALIDATION
+# ---------------- PASSWORD VALIDATION ---------------- #
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
@@ -78,15 +81,22 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
-# INTERNATIONALIZATION
+# ---------------- INTERNATIONAL ---------------- #
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
-# STATIC FILES
+# ---------------- STATIC FILES ---------------- #
 STATIC_URL = '/static/'
-
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# ---------------- AUTH REDIRECTS ---------------- #
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'home'
+LOGOUT_REDIRECT_URL = 'login'
+
+# ---------------- DEFAULT PRIMARY KEY ---------------- #
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
