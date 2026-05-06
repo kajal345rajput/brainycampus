@@ -1,22 +1,20 @@
 from pathlib import Path
 import os
 
-# base directory
+# BASE DIRECTORY
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# secret key
+# SECURITY
 SECRET_KEY = os.environ.get('SECRET_KEY', 'dev-secret-key')
 
-# debug (production-safe)
 DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
-# allowed hosts
 ALLOWED_HOSTS = os.environ.get(
     'ALLOWED_HOSTS',
     'brainycampus-5.onrender.com,localhost,127.0.0.1'
 ).split(',')
 
-# installed apps
+# APPLICATIONS
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -28,7 +26,7 @@ INSTALLED_APPS = [
     'myapp',
 ]
 
-# middleware
+# MIDDLEWARE
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
@@ -41,14 +39,14 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-# root url
+# URL CONFIG
 ROOT_URLCONF = 'brainycampus.urls'
 
-# templates
+# TEMPLATES
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],
+        'DIRS': [BASE_DIR / 'templates'],  # your templates folder
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -60,10 +58,10 @@ TEMPLATES = [
     },
 ]
 
-# wsgi
+# WSGI
 WSGI_APPLICATION = 'brainycampus.wsgi.application'
 
-# database
+# DATABASE (SQLite - fine for now)
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -71,7 +69,7 @@ DATABASES = {
     }
 }
 
-# password validation
+# PASSWORD VALIDATION
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
@@ -79,33 +77,33 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
-# language and timezone
+# LANGUAGE & TIMEZONE
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'Asia/Kolkata'
 USE_I18N = True
 USE_TZ = True
 
-# static files
+# STATIC FILES (VERY IMPORTANT FOR RENDER)
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 
-# whitenoise (production static handling)
+# WhiteNoise for production
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-# media files (optional but useful for ERP)
+# MEDIA FILES (optional)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-# login system
-LOGIN_URL = 'login'
-LOGIN_REDIRECT_URL = 'home'
-LOGOUT_REDIRECT_URL = 'login'
+# AUTH SETTINGS (🔥 FINAL FIX)
+LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = '/home/'
+LOGOUT_REDIRECT_URL = '/login/'
 
-# security (production level)
+# SECURITY (GOOD PRACTICE)
 SECURE_BROWSER_XSS_FILTER = True
 X_FRAME_OPTIONS = 'DENY'
 SECURE_CONTENT_TYPE_NOSNIFF = True
 
-# default primary key
+# DEFAULT PRIMARY KEY
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
