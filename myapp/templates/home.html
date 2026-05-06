@@ -1,98 +1,111 @@
-{% extends 'base.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Academic Organizer</title>
+{% load static %}
+<link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
 
-{% block content %}
+<body> 
 
-<!-- HERO SECTION -->
+<!-- LOGIN PAGE -->
+<div class="login-container" id="loginPage">
+  <div class="login-box">
+    <h2>Sign in to Student Academic Organizer</h2>
+    
+    <div class="input-group">
+      <input type="email" placeholder="Email address">
+    </div>
+
+    <div class="input-group">
+      <input type="password" id="password" placeholder="Password">
+      <div class="toggle-password" onclick="togglePassword()">Show Password</div>
+    </div>
+
+    <button class="login-btn" onclick="login()">Sign In</button>
+    <button class="secondary-btn" onclick="stayLoggedOut()">Stay Logged Out</button>
+  </div>
+</div>
+
+<!-- MAIN PAGE -->
+<div class="main-page" id="mainPage">
+
+<header>
+  <div class="logo">🎓 Student Academic Organizer</div>
+
+  <nav>
+    <a href="#home">Home</a>
+    <a href="#about">About</a>
+    <a href="#modules">Modules</a>
+    <a href="#dashboard">Dashboard</a>
+    <a href="#features">Features</a>
+    <a href="#contact">Contact</a>
+  </nav>
+
+  <button class="logout-btn" onclick="logout()">Logout</button>
+</header>
+
 <section class="hero" id="home">
   <div class="hero-content">
-    <h1>Welcome {{ request.user.username }}</h1>
-    <p>Manage your academic life smarter with BrainyCampus.</p>
+    <h1>Welcome to Your Academic Dashboard</h1>
+    <p>Manage timetable, assignments, attendance, notes, and more efficiently.</p>
+    <button onclick="document.getElementById('features').scrollIntoView()">Explore Features</button>
   </div>
 </section>
 
-{% if user.is_authenticated %}
+<section id="about"><h2>About Section</h2></section>
+<section id="modules"><h2>Modules Section</h2></section>
+<section id="dashboard"><h2>Dashboard Section</h2></section>
 
-<!-- FEATURES SECTION -->
+<!-- FULL FEATURES -->
 <section class="features" id="features">
   <h2>Core Modules</h2>
-
   <div class="cards">
-
-    <a href="{% url 'timetable' %}" class="card">
-      <div class="icon">📅</div>
-      <h3>Timetable Manager</h3>
-      <p>Organize daily classes efficiently.</p>
-    </a>
-
-    <a href="{% url 'assignments' %}" class="card">
-      <div class="icon">📝</div>
-      <h3>Assignment Tracker</h3>
-      <p>Track due dates and submission status.</p>
-    </a>
-
-    <a href="{% url 'attendance' %}" class="card">
-      <div class="icon">📊</div>
-      <h3>Attendance Tracker</h3>
-      <p>Monitor attendance percentage.</p>
-    </a>
-
-    <a href="{% url 'notes' %}" class="card">
-      <div class="icon">📚</div>
-      <h3>Notes Section</h3>
-      <p>Store short and quick notes.</p>
-    </a>
-
-    <a href="{% url 'notebook' %}" class="card">
-      <div class="icon">📒</div>
-      <h3>Notebook</h3>
-      <p>Maintain detailed lecture notes.</p>
-    </a>
-
-    <a href="{% url 'exam_planner' %}" class="card">
-      <div class="icon">🧪</div>
-      <h3>Exam Planner</h3>
-      <p>Manage exam schedules and subjects.</p>
-    </a>
-
-    <a href="{% url 'study_tracker' %}" class="card">
-      <div class="icon">⏱</div>
-      <h3>Study Tracker</h3>
-      <p>Track daily study hours.</p>
-    </a>
-
-    <a href="{% url 'todo' %}" class="card">
-      <div class="icon">✅</div>
-      <h3>To-Do List</h3>
-      <p>Track pending academic tasks.</p>
-    </a>
-
-    <a href="{% url 'grades' %}" class="card">
-      <div class="icon">🎯</div>
-      <h3>Grade Tracker</h3>
-      <p>Monitor marks and performance.</p>
-    </a>
-
-    <a href="{% url 'library' %}" class="card">
-      <div class="icon">📖</div>
-      <h3>Library Tracker</h3>
-      <p>Manage borrowed books and returns.</p>
-    </a>
-
-    <a href="{% url 'events' %}" class="card">
-      <div class="icon">📅</div>
-      <h3>Event Calendar</h3>
-      <p>Track events, seminars, and deadlines.</p>
-    </a>
-
-    <a href="{% url 'reminders' %}" class="card">
-      <div class="icon">⏰</div>
-      <h3>Reminder System</h3>
-      <p>Set reminders for tasks and exams.</p>
-    </a>
-
+    <div class="card"><div class="icon">📅</div><h3>Timetable Manager</h3><p>Organize daily classes efficiently.</p></div>
+    <div class="card"><div class="icon">📝</div><h3>Assignment Tracker</h3><p>Track due dates and status.</p></div>
+    <div class="card"><div class="icon">📊</div><h3>Attendance Tracker</h3><p>Monitor attendance percentage.</p></div>
+    <div class="card"><div class="icon">📚</div><h3>Notes Section</h3><p>Save short notes using localStorage.</p></div>
+    <div class="card"><div class="icon">📒</div><h3>Notebook</h3><p>Save detailed lecture notes and study material.</p></div>
+    <div class="card"><div class="icon">🧪</div><h3>Exam Planner</h3><p>Add exams, subjects, and dates to stay prepared.</p></div>
+    <div class="card"><div class="icon">⏱</div><h3>Study Tracker</h3><p>Log daily study hours and track progress.</p></div>
+    <div class="card"><div class="icon">✅</div><h3>To-Do List</h3><p>Track general tasks and pending academic work.</p></div>
+    <div class="card"><div class="icon">🎯</div><h3>Grade Tracker</h3><p>Keep track of marks, calculate averages, and monitor performance.</p></div>
+    <div class="card"><div class="icon">📖</div><h3>Library Tracker</h3><p>Manage borrowed books and return dates efficiently.</p></div>
+    <div class="card"><div class="icon">📅</div><h3>Event Calendar</h3><p>Track college events, seminars, and deadlines.</p></div>
+    <div class="card"><div class="icon">⏰</div><h3>Reminder / Alarm</h3><p>Set reminders for assignments, exams, and important tasks.</p></div>
   </div>
 </section>
 
-{% endif %}
+<section id="contact"><h2>Contact Section</h2></section>
 
-{% endblock %}
+<div class="module-container" id="moduleContainer"></div>
+
+<footer>
+  © 2026 Student Academic Organizer
+</footer>
+
+</div>
+
+<script>
+function togglePassword(){
+  var pass = document.getElementById("password");
+  pass.type = pass.type === "password" ? "text" : "password";
+}
+function login(){
+  document.getElementById("loginPage").style.display="none";
+  document.getElementById("mainPage").style.display="block";
+}
+function stayLoggedOut(){
+  document.getElementById("loginPage").style.display="none";
+  document.getElementById("mainPage").style.display="block";
+}
+function logout(){
+  document.getElementById("mainPage").style.display="none";
+  document.getElementById("loginPage").style.display="flex";
+}
+</script>
+
+</body>
+</html>

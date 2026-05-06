@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
-# ---------------- TIMETABLE ---------------- #
+# timetable
 class Timetable(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="timetables")
 
@@ -26,7 +26,7 @@ class Timetable(models.Model):
         return f"{self.user.username} | {self.day} | {self.subject}"
 
 
-# ---------------- ATTENDANCE ---------------- #
+# attendance
 class Attendance(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="attendance_records")
 
@@ -34,16 +34,23 @@ class Attendance(models.Model):
     total_classes = models.PositiveIntegerField(default=0)
     attended_classes = models.PositiveIntegerField(default=0)
 
+    class Meta:
+        unique_together = ('user', 'subject')
+        ordering = ['subject']
+
     def percentage(self):
         if self.total_classes == 0:
             return 0
         return round((self.attended_classes / self.total_classes) * 100, 2)
 
+    def is_low(self):
+        return self.percentage() < 75
+
     def __str__(self):
         return f"{self.user.username} | {self.subject}"
 
 
-# ---------------- ASSIGNMENT ---------------- #
+# assignment
 class Assignment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="assignments")
 
@@ -55,10 +62,10 @@ class Assignment(models.Model):
         ordering = ['due_date']
 
     def __str__(self):
-        return f"{self.user.username} | {self.title}"
+        return self.title
 
 
-# ---------------- NOTES ---------------- #
+# notes
 class Note(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="notes")
 
@@ -70,10 +77,10 @@ class Note(models.Model):
         ordering = ['-created_at']
 
     def __str__(self):
-        return f"{self.user.username} | {self.title}"
+        return self.title
 
 
-# ---------------- TODO ---------------- #
+# todo
 class Todo(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="todos")
 
@@ -85,10 +92,10 @@ class Todo(models.Model):
         ordering = ['-created_at']
 
     def __str__(self):
-        return f"{self.user.username} | {self.task}"
+        return self.task
 
 
-# ---------------- STUDY TRACKER ---------------- #
+# study tracker
 class StudyTracker(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="study_logs")
 
@@ -98,11 +105,8 @@ class StudyTracker(models.Model):
     class Meta:
         ordering = ['-date']
 
-    def __str__(self):
-        return f"{self.user.username} | {self.date} | {self.hours_studied} hrs"
 
-
-# ---------------- EXAM PLANNER ---------------- #
+# exam planner
 class ExamPlanner(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="exams")
 
@@ -113,10 +117,10 @@ class ExamPlanner(models.Model):
         ordering = ['exam_date']
 
     def __str__(self):
-        return f"{self.user.username} | {self.subject}"
+        return f"{self.subject} - {self.exam_date}"
 
 
-# ---------------- GRADES ---------------- #
+# grades
 class Grade(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="grades")
 
@@ -124,10 +128,10 @@ class Grade(models.Model):
     marks = models.FloatField()
 
     def __str__(self):
-        return f"{self.user.username} | {self.subject} | {self.marks}"
+        return f"{self.subject} - {self.marks}"
 
 
-# ---------------- LIBRARY ---------------- #
+# library
 class Library(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="books")
 
@@ -136,10 +140,10 @@ class Library(models.Model):
     return_date = models.DateField()
 
     def __str__(self):
-        return f"{self.user.username} | {self.book_name}"
+        return self.book_name
 
 
-# ---------------- EVENTS ---------------- #
+# events
 class Event(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="events")
 
@@ -150,10 +154,10 @@ class Event(models.Model):
         ordering = ['event_date']
 
     def __str__(self):
-        return f"{self.user.username} | {self.title}"
+        return self.title
 
 
-# ---------------- REMINDERS ---------------- #
+# reminders
 class Reminder(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="reminders")
 
@@ -164,4 +168,4 @@ class Reminder(models.Model):
         ordering = ['reminder_date']
 
     def __str__(self):
-        return f"{self.user.username} | {self.message}"
+        return self.message

@@ -1,5 +1,9 @@
 from django.contrib import admin
-from .models import *
+from .models import (
+    Timetable, Attendance, Assignment, Note,
+    Todo, StudyTracker, ExamPlanner,
+    Grade, Library, Event, Reminder
+)
 
 admin.site.register(Timetable)
 admin.site.register(Attendance)

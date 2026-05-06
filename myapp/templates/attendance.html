@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+{% block title %}Attendance Dashboard{% endblock %}
+
+{% block content %}
+
+<div class="dashboard">
+
+    <!-- HEADER -->
+    <div class="page-header">
+        <h1>📊 Attendance Dashboard</h1>
+        <p>Track your academic performance in real time</p>
+    </div>
+
+    <!-- STATS -->
+    <div class="grid-3">
+
+        <div class="card stat">
+            <div class="stat-icon">📚</div>
+            <p>Total Subjects</p>
+            <h2>{{ total_subjects }}</h2>
+        </div>
+
+        <div class="card stat highlight">
+            <div class="stat-icon">📈</div>
+            <p>Average Attendance</p>
+            <h2>{{ avg_attendance }}%</h2>
+        </div>
+
+        <div class="card stat">
+            <div class="stat-icon">🎯</div>
+            <p>Status</p>
+            <h2>
+                {% if avg_attendance >= 75 %}
+                    Good 👍
+                {% else %}
+                    Need Improvement ⚠
+                {% endif %}
+            </h2>
+        </div>
+
+    </div>
+
+    <!-- ADD SUBJECT -->
+    <div class="card form-card">
+        <h3>➕ Add New Subject</h3>
+
+        <form method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+                <input type="text" name="subject" placeholder="Enter subject name" required>
+                <button type="submit">Add Subject</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- RECORDS -->
+    <div class="records">
+
+        {% for r in records %}
+
+        <div class="card attendance-card">
+
+            <div class="att-head">
+                <h3>{{ r.subject }}</h3>
+                <span class="badge">{{ r.percentage }}%</span>
+            </div>
+
+            <!-- PROGRESS BAR -->
+            <div class="progress">
+                <div class="progress-bar {% if r.is_low %}low{% else %}good{% endif %}"
+                     style="width: {{ r.percentage|default:0 }}%;">
+                </div>
+            </div>
+
+            <p class="meta">
+                Total Classes: <b>{{ r.total_classes }}</b> |
+                Attended: <b>{{ r.attended_classes }}</b>
+            </p>
+
+            {% if r.is_low %}
+                <p class="warning">⚠ Attendance below 75% — Risk of shortage</p>
+            {% endif %}
+
+            <div class="actions">
+                <a href="{% url 'mark_attendance' r.id 'present' %}" class="btn green">✔ Present</a>
+                <a href="{% url 'mark_attendance' r.id 'absent' %}" class="btn red">✖ Absent</a>
+            </div>
+
+        </div>
+
+        {% empty %}
+
+        <div class="card empty">
+            <h3>No Attendance Data Found</h3>
+            <p>Add subjects to start tracking your academic progress</p>
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</div>
+
+{% endblock %}
