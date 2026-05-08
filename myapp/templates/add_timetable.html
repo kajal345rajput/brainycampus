@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'timetable.css' %}">
+
+<div class="tt-wrapper">
+
+    <div class="tt-header">
+        <h1>➕ Add Timetable</h1>
+        <p>Create class-wise lecture schedule</p>
+    </div>
+
+    <form method="POST" class="tt-form">
+        {% csrf_token %}
+
+        <input type="text" name="class_name" placeholder="Class (e.g. CSE-A)" required>
+
+        <input type="text" name="subject" placeholder="Subject Name" required>
+
+        <select name="day" required>
+            <option value="">Select Day</option>
+            <option>Monday</option>
+            <option>Tuesday</option>
+            <option>Wednesday</option>
+            <option>Thursday</option>
+            <option>Friday</option>
+            <option>Saturday</option>
+        </select>
+
+        <label>Start Time</label>
+        <input type="time" name="start_time" required>
+
+        <label>End Time</label>
+        <input type="time" name="end_time" required>
+
+        <input type="text" name="room" placeholder="Room No (optional)">
+
+        <button type="submit" class="btn-save">Save Timetable</button>
+    </form>
+
+</div>
+
+{% endblock %}

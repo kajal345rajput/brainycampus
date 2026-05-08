@@ -1,20 +1,27 @@
 from pathlib import Path
 import os
+from dotenv import load_dotenv
 
-# BASE DIRECTORY
+# Load .env file
+load_dotenv()
+
+# Base Directory
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# SECURITY
-SECRET_KEY = os.environ.get('SECRET_KEY', 'dev-secret-key')
 
-DEBUG = os.environ.get('DEBUG', 'True') == 'True'
+# Security
+SECRET_KEY = os.getenv("SECRET_KEY")
 
-ALLOWED_HOSTS = os.environ.get(
-    'ALLOWED_HOSTS',
-    'brainycampus-5.onrender.com,localhost,127.0.0.1'
-).split(',')
+DEBUG = True
 
-# APPLICATIONS
+ALLOWED_HOSTS = [
+    '127.0.0.1',
+    'localhost',
+    '.onrender.com',
+]
+
+
+# Installed Apps
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -26,10 +33,10 @@ INSTALLED_APPS = [
     'myapp',
 ]
 
-# MIDDLEWARE
+
+# Middleware
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
 
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -39,15 +46,22 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-# URL CONFIG
+
+# URL Configuration
 ROOT_URLCONF = 'brainycampus.urls'
 
-# TEMPLATES
+
+# Templates
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],  # your templates folder
+
+        'DIRS': [
+            BASE_DIR / 'myapp/templates',
+        ],
+
         'APP_DIRS': True,
+
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.request',
@@ -58,10 +72,12 @@ TEMPLATES = [
     },
 ]
 
+
 # WSGI
 WSGI_APPLICATION = 'brainycampus.wsgi.application'
 
-# DATABASE (SQLite - fine for now)
+
+# Database
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -69,41 +85,57 @@ DATABASES = {
     }
 }
 
-# PASSWORD VALIDATION
+
+# Password Validation
 AUTH_PASSWORD_VALIDATORS = [
-    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
-    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
-    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
-    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
+    {
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+    },
 ]
 
-# LANGUAGE & TIMEZONE
+
+# Language & Timezone
 LANGUAGE_CODE = 'en-us'
+
 TIME_ZONE = 'Asia/Kolkata'
+
 USE_I18N = True
+
 USE_TZ = True
 
-# STATIC FILES (VERY IMPORTANT FOR RENDER)
+
+# Static Files
 STATIC_URL = '/static/'
+
+STATICFILES_DIRS = [
+    BASE_DIR / 'myapp/static',
+]
+
 STATIC_ROOT = BASE_DIR / 'staticfiles'
-STATICFILES_DIRS = [BASE_DIR / 'static']
 
-# WhiteNoise for production
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-# MEDIA FILES (optional)
+# Media Files
 MEDIA_URL = '/media/'
+
 MEDIA_ROOT = BASE_DIR / 'media'
 
-# AUTH SETTINGS (🔥 FINAL FIX)
+
+# Authentication Redirects
 LOGIN_URL = '/login/'
+
 LOGIN_REDIRECT_URL = '/home/'
+
 LOGOUT_REDIRECT_URL = '/login/'
 
-# SECURITY (GOOD PRACTICE)
-SECURE_BROWSER_XSS_FILTER = True
-X_FRAME_OPTIONS = 'DENY'
-SECURE_CONTENT_TYPE_NOSNIFF = True
 
-# DEFAULT PRIMARY KEY
+# Default Primary Key
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

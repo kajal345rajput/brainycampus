@@ -1,0 +1,91 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Assignment Tracker</title>
+
+    <link rel="stylesheet" href="{% static 'assignment.css' %}">
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>📚 Assignment Tracker</h1>
+
+    <!-- ADD ASSIGNMENT FORM -->
+
+    <form method="POST" class="assignment-form">
+
+        {% csrf_token %}
+
+        <input type="text" name="title" placeholder="Assignment Title" required>
+
+        <input type="text" name="subject" placeholder="Subject Name" required>
+
+        <textarea name="description" placeholder="Description"></textarea>
+
+        <input type="date" name="due_date" required>
+
+        <button type="submit">Add Assignment</button>
+
+    </form>
+
+
+    <!-- ASSIGNMENT LIST -->
+
+    <div class="assignment-list">
+
+        {% for assignment in assignments %}
+
+        <div class="assignment-card">
+
+            <h2>{{ assignment.title }}</h2>
+
+            <p><strong>Subject:</strong> {{ assignment.subject }}</p>
+
+            <p><strong>Description:</strong> {{ assignment.description }}</p>
+
+            <p><strong>Due Date:</strong> {{ assignment.due_date }}</p>
+
+            <p>
+                <strong>Status:</strong>
+
+                <span class="
+                {% if assignment.status == 'Completed' %}
+                    completed
+                {% else %}
+                    pending
+                {% endif %}
+                ">
+                    {{ assignment.status }}
+                </span>
+            </p>
+
+            <div class="btn-group">
+
+                <a href="/complete-assignment/{{ assignment.id }}/">
+                    Complete
+                </a>
+
+                <a href="/delete-assignment/{{ assignment.id }}/">
+                    Delete
+                </a>
+
+            </div>
+
+        </div>
+
+        {% empty %}
+
+        <p>No assignments added yet.</p>
+
+        {% endfor %}
+
+    </div>
+
+</div>
+
+</body>
+</html>

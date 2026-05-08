@@ -1,101 +1,161 @@
 {% extends 'base.html' %}
-{% block title %}Attendance Dashboard{% endblock %}
+{% load static %}
 
 {% block content %}
 
-<div class="dashboard">
+<link rel="stylesheet" href="{% static 'attendance.css' %}">
 
-    <!-- HEADER -->
-    <div class="page-header">
-        <h1>📊 Attendance Dashboard</h1>
-        <p>Track your academic performance in real time</p>
-    </div>
+ 
+<div class="attendance-container">
 
-    <!-- STATS -->
-    <div class="grid-3">
+    <h1 class="page-title">Attendance Management</h1>
 
-        <div class="card stat">
-            <div class="stat-icon">📚</div>
-            <p>Total Subjects</p>
-            <h2>{{ total_subjects }}</h2>
-        </div>
+    <!-- ================= TEACHER PANEL ================= -->
+    {% if is_teacher %}
 
-        <div class="card stat highlight">
-            <div class="stat-icon">📈</div>
-            <p>Average Attendance</p>
-            <h2>{{ avg_attendance }}%</h2>
-        </div>
+    <div class="attendance-form-card">
 
-        <div class="card stat">
-            <div class="stat-icon">🎯</div>
-            <p>Status</p>
-            <h2>
-                {% if avg_attendance >= 75 %}
-                    Good 👍
-                {% else %}
-                    Need Improvement ⚠
-                {% endif %}
-            </h2>
-        </div>
-
-    </div>
-
-    <!-- ADD SUBJECT -->
-    <div class="card form-card">
-        <h3>➕ Add New Subject</h3>
+        <h2>Mark Attendance</h2>
 
         <form method="POST">
             {% csrf_token %}
+
             <div class="form-group">
-                <input type="text" name="subject" placeholder="Enter subject name" required>
-                <button type="submit">Add Subject</button>
+                <label>Select Student</label>
+
+                <select name="student" required>
+
+                    {% for student in students %}
+                    <option value="{{ student.id }}">
+                        {{ student.username }}
+                    </option>
+                    {% endfor %}
+
+                </select>
             </div>
+
+            <div class="form-group">
+                <label>Subject</label>
+                <input type="text" name="subject" required>
+            </div>
+
+            <div class="form-group">
+                <label>Date</label>
+                <input type="date" name="date" required>
+            </div>
+
+            <div class="form-group">
+                <label>Status</label>
+
+                <select name="status" required>
+                    <option value="Present">Present</option>
+                    <option value="Absent">Absent</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn-submit">
+                Mark Attendance
+            </button>
+
         </form>
     </div>
 
-    <!-- RECORDS -->
-    <div class="records">
+    {% endif %}
 
-        {% for r in records %}
 
-        <div class="card attendance-card">
+    <!-- ================= STUDENT STATS ================= -->
+    {% if not is_teacher %}
 
-            <div class="att-head">
-                <h3>{{ r.subject }}</h3>
-                <span class="badge">{{ r.percentage }}%</span>
+    <div class="stats-card">
+
+        <h2>Your Attendance Statistics</h2>
+
+        <div class="stats-grid">
+
+            <div class="stat-box">
+                <h3>Total Classes</h3>
+                <p>{{ total_classes }}</p>
             </div>
 
-            <!-- PROGRESS BAR -->
-            <div class="progress">
-                <div class="progress-bar {% if r.is_low %}low{% else %}good{% endif %}"
-                     style="width: {{ r.percentage|default:0 }}%;">
-                </div>
+            <div class="stat-box">
+                <h3>Present</h3>
+                <p>{{ present_count }}</p>
             </div>
 
-            <p class="meta">
-                Total Classes: <b>{{ r.total_classes }}</b> |
-                Attended: <b>{{ r.attended_classes }}</b>
-            </p>
-
-            {% if r.is_low %}
-                <p class="warning">⚠ Attendance below 75% — Risk of shortage</p>
-            {% endif %}
-
-            <div class="actions">
-                <a href="{% url 'mark_attendance' r.id 'present' %}" class="btn green">✔ Present</a>
-                <a href="{% url 'mark_attendance' r.id 'absent' %}" class="btn red">✖ Absent</a>
+            <div class="stat-box">
+                <h3>Attendance %</h3>
+                <p>{{ percentage }}%</p>
             </div>
 
         </div>
+    </div>
 
-        {% empty %}
+    {% endif %}
 
-        <div class="card empty">
-            <h3>No Attendance Data Found</h3>
-            <p>Add subjects to start tracking your academic progress</p>
-        </div>
 
-        {% endfor %}
+    <!-- ================= RECORD TABLE ================= -->
+
+    <div class="table-card">
+
+        <h2>Attendance Records</h2>
+
+        <table>
+
+            <thead>
+                <tr>
+
+                    {% if is_teacher %}
+                    <th>Student</th>
+                    {% endif %}
+
+                    <th>Subject</th>
+                    <th>Date</th>
+                    <th>Status</th>
+
+                    {% if is_teacher %}
+                    <th>Marked By</th>
+                    {% endif %}
+
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for record in records %}
+
+                <tr>
+
+                    {% if is_teacher %}
+                    <td>{{ record.student.username }}</td>
+                    {% endif %}
+
+                    <td>{{ record.subject }}</td>
+
+                    <td>{{ record.date }}</td>
+
+                    <td>
+                        <span class="{% if record.status == 'Present' %}present{% else %}absent{% endif %}">
+                            {{ record.status }}
+                        </span>
+                    </td>
+
+                    {% if is_teacher %}
+                    <td>{{ record.marked_by.username }}</td>
+                    {% endif %}
+
+                </tr>
+
+                {% empty %}
+
+                <tr>
+                    <td colspan="5">No attendance records found.</td>
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
 
     </div>
 

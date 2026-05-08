@@ -13,20 +13,15 @@
   </div>
 </section>
 
-<!-- ABOUT -->
-<section id="about">
-  <h2>About Section</h2>
+<!-- ABOUT SECTION -->
+<section id="about" class="section">
+    <h2>About Us</h2>
+    <p>
+        BrainyCampus is a smart academic system that helps students manage attendance,
+        assignments, notes, and academic planning in one place.
+    </p>
 </section>
 
-<!-- MODULES -->
-<section id="modules">
-  <h2>Modules Section</h2>
-</section>
-
-<!-- DASHBOARD -->
-<section id="dashboard">
-  <h2>Dashboard Section</h2>
-</section>
 
 <!-- FEATURES -->
 <section class="features" id="features">
@@ -34,84 +29,109 @@
 
   <div class="cards">
 
-    <div class="card">
-      <div class="icon">📅</div>
-      <h3>Timetable Manager</h3>
-      <p>Organize daily classes efficiently.</p>
-    </div>
+    <!-- TIMETABLE -->
+<a href="{% url 'timetable' %}" class="card">
+  <div class="icon">📅</div>
+  <h3>Timetable Manager</h3>
+  <p>Organize daily classes efficiently.</p>
+</a>
 
-    <div class="card">
-      <div class="icon">📝</div>
-      <h3>Assignment Tracker</h3>
-      <p>Track due dates and status.</p>
-    </div>
+    <!-- ASSIGNMENT -->
+    <a href="/assignments/" class="card">
 
-    <div class="card">
-      <div class="icon">📊</div>
-      <h3>Attendance Tracker</h3>
-      <p>Monitor attendance percentage.</p>
-    </div>
+       <div class="icon">📝</div>
 
-    <div class="card">
-      <div class="icon">📚</div>
-      <h3>Notes Section</h3>
-      <p>Save notes in database.</p>
-    </div>
+       <h3>Assignment Tracker</h3>
 
-    <div class="card">
+      <p>Track assignments and deadlines</p>
+
+   </a>
+
+    <!-- ATTENDANCE  -->
+<a href="{% url 'attendance' %}" class="card">
+    <div class="icon">📅</div>
+    <h3>Attendance</h3>
+    <p>Track student attendance records.</p>
+</a>
+
+     
+    <!-- NOTES -->
+<a href="{% url 'notes' %}" class="card">
+  <div class="icon">📚</div>
+  <h3>Notes</h3>
+  <p>Save, manage and view your notes easily.</p>
+</a>
+
+    <!-- NOTEBOOK -->
+    <a href="#" class="card">
       <div class="icon">📒</div>
       <h3>Notebook</h3>
       <p>Store detailed study material.</p>
-    </div>
+    </a>
 
-    <div class="card">
+    <!-- EXAM -->
+    <a href="#" class="card">
       <div class="icon">🧪</div>
       <h3>Exam Planner</h3>
       <p>Plan exams and preparation.</p>
-    </div>
+    </a>
 
-    <div class="card">
+    <!-- STUDY -->
+    <a href="#" class="card">
       <div class="icon">⏱</div>
       <h3>Study Tracker</h3>
       <p>Track study hours.</p>
-    </div>
+    </a>
 
-    <div class="card">
+    <!-- TODO -->
+    <a href="{% url 'todo' %}" class="card">
       <div class="icon">✅</div>
       <h3>To-Do List</h3>
       <p>Manage tasks.</p>
-    </div>
+    </a>
 
-    <div class="card">
+    <!-- GRADES -->
+    <a href="#" class="card">
       <div class="icon">🎯</div>
       <h3>Grade Tracker</h3>
       <p>Track performance.</p>
-    </div>
+    </a>
 
-    <div class="card">
+    <!-- LIBRARY -->
+    <a href="#" class="card">
       <div class="icon">📖</div>
       <h3>Library Tracker</h3>
       <p>Manage books.</p>
-    </div>
+    </a>
 
-    <div class="card">
+    <!-- EVENTS -->
+    <a href="#" class="card">
       <div class="icon">📅</div>
       <h3>Event Calendar</h3>
       <p>Track events.</p>
-    </div>
+    </a>
 
-    <div class="card">
+    <!-- REMINDER -->
+    <a href="#" class="card">
       <div class="icon">⏰</div>
       <h3>Reminder</h3>
       <p>Set alerts.</p>
-    </div>
+    </a>
 
   </div>
 </section>
 
-<!-- CONTACT -->
-<section id="contact">
-  <h2>Contact Section</h2>
+<!-- CONTACT SECTION -->
+<section id="contact" class="section">
+    <h2>Contact Us</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+        <input type="text" placeholder="Your Name">
+        <input type="email" placeholder="Your Email">
+        <textarea placeholder="Message"></textarea>
+        <button type="submit">Send</button>
+    </form>
 </section>
 
 {% endblock %}

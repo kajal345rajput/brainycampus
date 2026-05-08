@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'timetable.css' %}">
+
+<div class="tt-wrapper">
+
+    <div class="tt-header">
+        <h1>📅 Academic Timetable</h1>
+        <p>Class-wise lecture schedule</p>
+    </div>
+
+    <div class="tt-grid">
+
+        {% for t in timetable %}
+        <div class="tt-card">
+
+            <div class="tt-class">
+                🏫 {{ t.class_name }}
+            </div>
+
+            <div class="tt-subject">
+                📘 {{ t.subject }}
+            </div>
+
+            <div class="tt-details">
+                <p>📆 {{ t.day }}</p>
+                <p>⏰ {{ t.start_time }} - {{ t.end_time }}</p>
+                <p>📍 Room: {{ t.room }}</p>
+            </div>
+
+            <!-- ✅ EDIT / DELETE ONLY FOR AUTHORIZED USERS -->
+            {% if request.user.is_staff %}
+
+            <div class="tt-actions">
+
+                <a href="{% url 'edit_timetable' t.id %}" class="edit-btn">
+                    ✏ Edit
+                </a>
+
+                <a href="{% url 'delete_timetable' t.id %}" class="delete-btn">
+                    ❌ Delete
+                </a>
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+        {% empty %}
+        <p>No timetable found</p>
+        {% endfor %}
+
+    </div>
+
+</div>
+
+{% endblock %}
