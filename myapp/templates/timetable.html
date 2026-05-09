@@ -10,8 +10,15 @@
     <div class="tt-header">
         <h1>📅 Academic Timetable</h1>
         <p>Class-wise lecture schedule</p>
-    </div>
 
+        {% if request.user.is_staff %}
+            <a href="{% url 'add_timetable' %}" class="btn-add">
+                ➕ Add Timetable
+            </a>
+        {% endif %}
+
+    </div>
+    
     <div class="tt-grid">
 
         {% for t in timetable %}
@@ -32,7 +39,7 @@
             </div>
 
             <!-- ✅ EDIT / DELETE ONLY FOR AUTHORIZED USERS -->
-            {% if request.user.is_staff %}
+            {% if request.user.is_staff or request.user.is_superuser %}
 
             <div class="tt-actions">
 

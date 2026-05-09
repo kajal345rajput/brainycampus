@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'timetable.css' %}">
+
+<div class="tt-wrapper">
+
+    <div class="tt-header">
+        <h1>✏ Edit Timetable</h1>
+        <p>Update lecture schedule</p>
+    </div>
+
+    <form method="POST" class="tt-form">
+        {% csrf_token %}
+
+        <input type="text"
+               name="class_name"
+               value="{{ timetable.class_name }}"
+               required>
+
+        <input type="text"
+               name="subject"
+               value="{{ timetable.subject }}"
+               required>
+
+        <select name="day" required>
+
+            <option value="Monday"
+            {% if timetable.day == "Monday" %}selected{% endif %}>
+            Monday
+            </option>
+
+            <option value="Tuesday"
+            {% if timetable.day == "Tuesday" %}selected{% endif %}>
+            Tuesday
+            </option>
+
+            <option value="Wednesday"
+            {% if timetable.day == "Wednesday" %}selected{% endif %}>
+            Wednesday
+            </option>
+
+            <option value="Thursday"
+            {% if timetable.day == "Thursday" %}selected{% endif %}>
+            Thursday
+            </option>
+
+            <option value="Friday"
+            {% if timetable.day == "Friday" %}selected{% endif %}>
+            Friday
+            </option>
+
+            <option value="Saturday"
+            {% if timetable.day == "Saturday" %}selected{% endif %}>
+            Saturday
+            </option>
+
+        </select>
+
+        <label>Start Time</label>
+        <input type="time"
+               name="start_time"
+               value="{{ timetable.start_time|time:'H:i' }}"
+               required>
+
+        <label>End Time</label>
+        <input type="time"
+               name="end_time"
+               value="{{ timetable.end_time|time:'H:i' }}"
+               required>
+
+        <input type="text"
+               name="room"
+               value="{{ timetable.room }}">
+
+        <button type="submit" class="btn-save">
+            Update Timetable
+        </button>
+
+    </form>
+
+</div>
+
+{% endblock %}

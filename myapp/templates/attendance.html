@@ -5,12 +5,11 @@
 
 <link rel="stylesheet" href="{% static 'attendance.css' %}">
 
- 
 <div class="attendance-container">
 
     <h1 class="page-title">Attendance Management</h1>
 
-    <!-- ================= TEACHER PANEL ================= -->
+    <!--===STAFF PANEL===-->
     {% if is_teacher %}
 
     <div class="attendance-form-card">
@@ -20,50 +19,110 @@
         <form method="POST">
             {% csrf_token %}
 
+            <!--===CLASS===-->
             <div class="form-group">
-                <label>Select Student</label>
 
-                <select name="student" required>
+                <label>Class</label>
 
-                    {% for student in students %}
-                    <option value="{{ student.id }}">
-                        {{ student.username }}
-                    </option>
-                    {% endfor %}
+                <select name="class_name" required>
+
+                   <option value="">Select Class</option>
+
+                   <option value="CSE-A">CSE-A</option>
+
+                   <option value="CSE-B">CSE-B</option>
+
+                   <option value="BCA-1">BCA-1</option>
+
+                   <option value="BCA-2">BCA-2</option>
+
+                   <option value="MCA: I-Sem">MCA: I-Sem</option>
+
+                   <option value="MCA: II-Sem">MCA: II-Sem</option>
 
                 </select>
+
             </div>
 
+            <!--===SUBJECT===-->
             <div class="form-group">
                 <label>Subject</label>
-                <input type="text" name="subject" required>
+                <input type="text"
+                       name="subject"
+                       placeholder="e.g. Python"
+                       required>
             </div>
 
+            <!--===DATE===-->
             <div class="form-group">
                 <label>Date</label>
-                <input type="date" name="date" required>
+                <input type="date"
+                       name="date"
+                       required>
             </div>
 
-            <div class="form-group">
-                <label>Status</label>
+            <!--===STUDENT TABLE===-->
+            <table>
 
-                <select name="status" required>
-                    <option value="Present">Present</option>
-                    <option value="Absent">Absent</option>
-                </select>
-            </div>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Enrollment No.</th>
+                        <th>Present</th>
+                        <th>Absent</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for student in students %}
+
+                    <tr>
+
+                        <!--===STUDENT NAME===-->
+                        <td>
+                            {{ student.user.username }}
+                        </td>
+
+                        <!--===ENROLLMENT===-->
+                        <td>
+                            {{ student.enrollment_no }}
+                        </td>
+
+                        <!--===PRESENT===-->
+                        <td>
+                            <input type="radio"
+                                   name="student_{{ student.user.id }}"
+                                   value="P"
+                                   required>
+                        </td>
+
+                        <!--===ABSENT===-->
+                        <td>
+                            <input type="radio"
+                                   name="student_{{ student.user.id }}"
+                                   value="A">
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
 
             <button type="submit" class="btn-submit">
-                Mark Attendance
+                Save Attendance
             </button>
 
         </form>
+
     </div>
 
     {% endif %}
 
-
-    <!-- ================= STUDENT STATS ================= -->
+    <!--===STUDENT STATS===-->
     {% if not is_teacher %}
 
     <div class="stats-card">
@@ -88,13 +147,12 @@
             </div>
 
         </div>
+
     </div>
 
     {% endif %}
 
-
-    <!-- ================= RECORD TABLE ================= -->
-
+    <!--===ATTENDANCE RECORD TABLE===-->
     <div class="table-card">
 
         <h2>Attendance Records</h2>
@@ -102,12 +160,14 @@
         <table>
 
             <thead>
+
                 <tr>
 
                     {% if is_teacher %}
                     <th>Student</th>
                     {% endif %}
 
+                    <th>Class</th>
                     <th>Subject</th>
                     <th>Date</th>
                     <th>Status</th>
@@ -117,6 +177,7 @@
                     {% endif %}
 
                 </tr>
+
             </thead>
 
             <tbody>
@@ -129,14 +190,24 @@
                     <td>{{ record.student.username }}</td>
                     {% endif %}
 
+                    <td>{{ record.class_name }}</td>
+
                     <td>{{ record.subject }}</td>
 
                     <td>{{ record.date }}</td>
 
                     <td>
-                        <span class="{% if record.status == 'Present' %}present{% else %}absent{% endif %}">
-                            {{ record.status }}
+
+                        <span class="{% if record.status == 'P' %}present{% else %}absent{% endif %}">
+
+                            {% if record.status == 'P' %}
+                                Present
+                            {% else %}
+                                Absent
+                            {% endif %}
+
                         </span>
+
                     </td>
 
                     {% if is_teacher %}
@@ -148,7 +219,11 @@
                 {% empty %}
 
                 <tr>
-                    <td colspan="5">No attendance records found.</td>
+
+                    <td colspan="6" class="empty-message">
+                        No attendance records found.
+                    </td>
+
                 </tr>
 
                 {% endfor %}

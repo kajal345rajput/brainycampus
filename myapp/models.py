@@ -2,8 +2,9 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 from django.core.validators import MinValueValidator
+from datetime import date
 
-
+#=======TIMETABLE==================#
 class Timetable(models.Model):
 
     DAY_CHOICES = [
@@ -30,29 +31,29 @@ class Timetable(models.Model):
 
     def __str__(self):
         return f"{self.class_name} | {self.day} | {self.subject}"
-        
+
 # ================= ATTENDANCE =================
+
 class Attendance(models.Model):
 
-    STATUS_CHOICES = (
-        ('Present', 'Present'),
-        ('Absent', 'Absent'),
-    )
+    STATUS_CHOICES = [
+        ('P', 'Present'),
+        ('A', 'Absent'),
+    ]
 
     student = models.ForeignKey(
         User,
-        on_delete=models.CASCADE,
-        related_name='attendance_records'
+        on_delete=models.CASCADE
     )
+
+    class_name = models.CharField(max_length=50)
 
     subject = models.CharField(max_length=100)
 
-    date = models.DateField(
-        default=timezone.now
-    )
+    date = models.DateField()
 
     status = models.CharField(
-        max_length=10,
+        max_length=1,
         choices=STATUS_CHOICES
     )
 
@@ -63,59 +64,90 @@ class Attendance(models.Model):
         related_name='marked_attendance'
     )
 
-    created_at = models.DateTimeField(
-        auto_now_add=True
-    )
-
-    class Meta:
-        unique_together = ('student', 'subject', 'date')
-        ordering = ['-date']
-
     def __str__(self):
         return f"{self.student.username} - {self.subject} - {self.status}"
 
+from django.contrib.auth.models import User
+
+# ================= STUDENT =================
+class Student(models.Model):
+
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE
+    )
+
+    enrollment_no = models.CharField(max_length=50)
+
+    class_name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.class_name}"
 
 # ================= ASSIGNMENT =================
 class Assignment(models.Model):
 
-    STATUS_CHOICES = [
-        ('Pending', 'Pending'),
-        ('Completed', 'Completed'),
-    ]
-
-    user = models.ForeignKey(
+    teacher = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name="assignments"
+        null=True,
+        blank=True
     )
 
     title = models.CharField(max_length=200)
 
+    class_name = models.CharField(max_length=100)
+
     subject = models.CharField(max_length=100)
 
-    description = models.TextField(
-        blank=True,
-        null=True
-    )
+    description = models.TextField(blank=True)
 
     due_date = models.DateField()
 
+    question_pdf = models.FileField(
+        upload_to='assignments/',
+        null=True,
+        blank=True
+    )
+
     status = models.CharField(
         max_length=20,
-        choices=STATUS_CHOICES,
         default='Pending'
     )
 
-    created_at = models.DateTimeField(
-        default=timezone.now
-    )
+    created_at = models.DateTimeField(auto_now_add=True)
 
-    class Meta:
-        ordering = ['due_date']
+    def is_expired(self):
+        return date.today() > self.due_date
 
     def __str__(self):
-        return f"{self.title} ({self.status})"
+        return self.title
 
+
+
+# ================= SUBMISSION =================
+class Submission(models.Model):
+
+    assignment = models.ForeignKey(
+        Assignment,
+        on_delete=models.CASCADE
+    )
+
+    student = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE
+    )
+
+    solution_file = models.FileField(
+        upload_to='solutions/'
+    )
+
+    submitted_at = models.DateTimeField(
+        auto_now_add=True
+    )
+
+    def __str__(self):
+        return f"{self.student.username} - {self.assignment.title}"
 
 # ================= NOTES =================
 class Note(models.Model):

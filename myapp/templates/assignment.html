@@ -3,37 +3,104 @@
 <!DOCTYPE html>
 <html>
 <head>
+
     <title>Assignment Tracker</title>
 
     <link rel="stylesheet" href="{% static 'assignment.css' %}">
+
 </head>
 
 <body>
 
 <div class="container">
 
-    <h1>📚 Assignment Tracker</h1>
+    <h1>📚 Assignment Management</h1>
 
-    <!-- ADD ASSIGNMENT FORM -->
 
-    <form method="POST" class="assignment-form">
+    <!-- ================= TEACHER FORM ================= -->
+
+    {% if is_teacher %}
+
+    <form method="POST"
+          enctype="multipart/form-data"
+          class="assignment-form">
 
         {% csrf_token %}
 
-        <input type="text" name="title" placeholder="Assignment Title" required>
+        <!-- TITLE -->
 
-        <input type="text" name="subject" placeholder="Subject Name" required>
+        <input type="text"
+               name="title"
+               placeholder="Assignment Title"
+               required>
 
-        <textarea name="description" placeholder="Description"></textarea>
 
-        <input type="date" name="due_date" required>
+        <!-- CLASS -->
 
-        <button type="submit">Add Assignment</button>
+        <select name="class_name" required>
+
+            <option value="">
+                Select Class
+            </option>
+
+            <option value="CSE-A">CSE-A</option>
+            <option value="CSE-B">CSE-B</option>
+            <option value="BCA-1">BCA-1</option>
+            <option value="BCA-2">BCA-2</option>
+            <option value="MCA: I-Sem">MCA: I-Sem</option>
+            <option value="MCA: II-Sem">MCA: II-Sem</option>
+
+        </select>
+
+
+        <!-- SUBJECT -->
+
+        <input type="text"
+               name="subject"
+               placeholder="Subject Name"
+               required>
+
+
+        <!-- DESCRIPTION -->
+
+        <textarea name="description"
+                  placeholder="Assignment Description"></textarea>
+
+
+        <!-- LAST DATE -->
+
+        <label class="label-text">
+            Last Submission Date
+        </label>
+
+        <input type="date"
+               name="due_date"
+               required>
+
+
+        <!-- PDF -->
+
+        <label class="label-text">
+            Upload Question PDF
+        </label>
+
+        <input type="file"
+               name="question_pdf">
+
+
+        <!-- BUTTON -->
+
+        <button type="submit">
+            Upload Assignment
+        </button>
 
     </form>
 
+    {% endif %}
 
-    <!-- ASSIGNMENT LIST -->
+
+
+    <!-- ================= ASSIGNMENTS ================= -->
 
     <div class="assignment-list">
 
@@ -41,45 +108,149 @@
 
         <div class="assignment-card">
 
-            <h2>{{ assignment.title }}</h2>
+            <div class="top-section">
 
-            <p><strong>Subject:</strong> {{ assignment.subject }}</p>
+                <h2>
+                    {{ assignment.title }}
+                </h2>
 
-            <p><strong>Description:</strong> {{ assignment.description }}</p>
+                <span class="class-badge">
+                    {{ assignment.class_name }}
+                </span>
 
-            <p><strong>Due Date:</strong> {{ assignment.due_date }}</p>
+            </div>
+
 
             <p>
+
+                <strong>Subject:</strong>
+                {{ assignment.subject }}
+
+            </p>
+
+            <p>
+
+                <strong>Description:</strong>
+                {{ assignment.description }}
+
+            </p>
+
+            <p>
+
+                <strong>Last Date:</strong>
+                {{ assignment.due_date }}
+
+            </p>
+
+
+            <!-- PDF -->
+
+            {% if assignment.question_pdf %}
+
+            <a href="{{ assignment.question_pdf.url }}"
+               target="_blank"
+               class="pdf-btn">
+
+                📄 Download Question PDF
+
+            </a>
+
+            {% endif %}
+
+
+            <!-- STATUS -->
+
+            <p>
+
                 <strong>Status:</strong>
 
-                <span class="
                 {% if assignment.status == 'Completed' %}
-                    completed
+
+                    <span class="completed">
+                        Completed
+                    </span>
+
                 {% else %}
-                    pending
+
+                    <span class="pending">
+                        Pending
+                    </span>
+
                 {% endif %}
-                ">
-                    {{ assignment.status }}
-                </span>
+
             </p>
+
+
+
+            <!-- ================= STUDENT SIDE ================= -->
+
+            {% if not is_teacher %}
+
+                {% if assignment.is_expired %}
+
+                    <div class="expired-box">
+
+                        ⛔ Submission Closed
+
+                    </div>
+
+                {% else %}
+
+                <form method="POST"
+                      action="{% url 'submit_assignment' assignment.id %}"
+                      enctype="multipart/form-data"
+                      class="submission-form">
+
+                    {% csrf_token %}
+
+                    <input type="file"
+                           name="solution_file"
+                           required>
+
+                    <button type="submit"
+                            class="submit-btn">
+
+                        Submit Solution
+
+                    </button>
+
+                </form>
+
+                {% endif %}
+
+            {% endif %}
+
+
+
+            <!-- ================= TEACHER SIDE ================= -->
+
+            {% if is_teacher %}
 
             <div class="btn-group">
 
-                <a href="/complete-assignment/{{ assignment.id }}/">
-                    Complete
+                <a href="{% url 'view_submissions' assignment.id %}">
+                    View Solutions
                 </a>
 
-                <a href="/delete-assignment/{{ assignment.id }}/">
+                <a href="{% url 'delete_assignment' assignment.id %}">
                     Delete
                 </a>
 
             </div>
 
+            {% endif %}
+
         </div>
 
         {% empty %}
 
-        <p>No assignments added yet.</p>
+        <div class="empty-box">
+
+            <h3>
+                No Assignments Available
+            </h3>
+
+        </div>
 
         {% endfor %}
 

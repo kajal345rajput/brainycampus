@@ -1,73 +1,143 @@
 body{
     margin:0;
     padding:0;
-    font-family:Arial;
+    font-family:Arial, Helvetica, sans-serif;
     background:#f4f7fc;
 }
 
+
+/* ================= CONTAINER ================= */
+
 .container{
     width:90%;
+    max-width:1200px;
     margin:auto;
     padding:30px;
 }
 
+
+/* ================= TITLE ================= */
+
 h1{
     text-align:center;
     color:#1e3a8a;
-    margin-bottom:30px;
+    margin-bottom:35px;
+    font-size:40px;
 }
+
+
+/* ================= FORM ================= */
 
 .assignment-form{
     background:white;
-    padding:20px;
-    border-radius:10px;
+    padding:25px;
+    border-radius:12px;
     box-shadow:0px 0px 10px rgba(0,0,0,0.1);
 
     display:flex;
     flex-direction:column;
-    gap:15px;
+    gap:18px;
 
-    margin-bottom:30px;
+    margin-bottom:40px;
 }
 
 .assignment-form input,
-.assignment-form textarea{
-    padding:12px;
+.assignment-form textarea,
+.assignment-form select{
+    padding:14px;
     border:1px solid #ccc;
     border-radius:8px;
     font-size:16px;
+}
+
+.assignment-form textarea{
+    resize:none;
+    height:120px;
+}
+
+.label-text{
+    font-weight:bold;
+    color:#1e293b;
+    margin-bottom:-10px;
 }
 
 .assignment-form button{
     background:#2563eb;
     color:white;
     border:none;
-    padding:12px;
+    padding:14px;
     border-radius:8px;
     cursor:pointer;
     font-size:16px;
+    transition:0.3s;
 }
 
 .assignment-form button:hover{
     background:#1d4ed8;
 }
 
+
+/* ================= ASSIGNMENT LIST ================= */
+
 .assignment-list{
     display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
-    gap:20px;
+    grid-template-columns:repeat(auto-fit,minmax(330px,1fr));
+    gap:25px;
 }
+
+
+/* ================= CARD ================= */
 
 .assignment-card{
     background:white;
-    padding:20px;
-    border-radius:10px;
+    padding:25px;
+    border-radius:12px;
     box-shadow:0px 0px 10px rgba(0,0,0,0.1);
+
+    transition:0.3s;
+}
+
+.assignment-card:hover{
+    transform:translateY(-5px);
 }
 
 .assignment-card h2{
     color:#1e40af;
+    margin:0;
 }
+
+.assignment-card p{
+    color:#374151;
+    line-height:1.7;
+}
+
+
+/* ================= TOP SECTION ================= */
+
+.top-section{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    margin-bottom:15px;
+}
+
+
+/* ================= CLASS BADGE ================= */
+
+.class-badge{
+    background:#2563eb;
+    color:white;
+
+    padding:6px 12px;
+    border-radius:20px;
+
+    font-size:13px;
+    font-weight:bold;
+}
+
+
+/* ================= STATUS ================= */
 
 .pending{
     color:red;
@@ -79,24 +149,145 @@ h1{
     font-weight:bold;
 }
 
-.btn-group{
-    margin-top:15px;
+
+/* ================= PDF BUTTON ================= */
+
+.pdf-btn{
+    display:inline-block;
+
+    margin-top:10px;
+    margin-bottom:15px;
+
+    text-decoration:none;
+
+    background:#0ea5e9;
+    color:white;
+
+    padding:10px 15px;
+    border-radius:8px;
+
+    transition:0.3s;
+}
+
+.pdf-btn:hover{
+    background:#0284c7;
+}
+
+
+/* ================= SUBMISSION ================= */
+
+.submission-form{
+    margin-top:20px;
+
     display:flex;
-    gap:10px;
+    flex-direction:column;
+    gap:12px;
+}
+
+.submit-btn{
+    background:#16a34a;
+    color:white;
+
+    border:none;
+
+    padding:12px;
+    border-radius:8px;
+
+    cursor:pointer;
+
+    font-size:15px;
+
+    transition:0.3s;
+}
+
+.submit-btn:hover{
+    background:#15803d;
+}
+
+
+/* ================= EXPIRED ================= */
+
+.expired-box{
+    margin-top:20px;
+
+    background:#fee2e2;
+    color:#b91c1c;
+
+    padding:12px;
+    border-radius:8px;
+
+    text-align:center;
+    font-weight:bold;
+}
+
+
+/* ================= BUTTONS ================= */
+
+.btn-group{
+    margin-top:20px;
+
+    display:flex;
+    gap:12px;
 }
 
 .btn-group a{
     text-decoration:none;
-    padding:8px 14px;
-    border-radius:6px;
+
+    padding:10px 15px;
+
+    border-radius:8px;
+
     color:white;
     font-size:14px;
+
+    transition:0.3s;
 }
 
 .btn-group a:first-child{
     background:green;
 }
 
+.btn-group a:first-child:hover{
+    background:#166534;
+}
+
 .btn-group a:last-child{
     background:red;
+}
+
+.btn-group a:last-child:hover{
+    background:#b91c1c;
+}
+
+
+/* ================= EMPTY ================= */
+
+.empty-box{
+    background:white;
+    padding:30px;
+    border-radius:12px;
+    text-align:center;
+    color:gray;
+}
+
+
+/* ================= RESPONSIVE ================= */
+
+@media(max-width:768px){
+
+    h1{
+        font-size:30px;
+    }
+
+    .container{
+        width:95%;
+        padding:20px;
+    }
+
+    .top-section{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:10px;
+    }
+
 }

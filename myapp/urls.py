@@ -18,9 +18,10 @@ from .views import (
     delete_todo,
 
     # ASSIGNMENT
-    assignment_home,
+    assignment_view,
+    submit_assignment,
+    view_submissions,
     delete_assignment,
-    complete_assignment,
 
     # ATTENDANCE
     attendance_view,
@@ -90,23 +91,30 @@ urlpatterns = [
     ),
 
     # ================= ASSIGNMENT =================
-    path(
-        'assignments/',
-        assignment_home,
-        name='assignment_home'
-    ),
 
-    path(
-        'delete-assignment/<int:id>/',
-        delete_assignment,
-        name='delete_assignment'
-    ),
+path(
+    'assignments/',
+    views.assignment_view,
+    name='assignment'
+),
 
-    path(
-        'complete-assignment/<int:id>/',
-        complete_assignment,
-        name='complete_assignment'
-    ),
+path(
+    'submit-assignment/<int:assignment_id>/',
+    views.submit_assignment,
+    name='submit_assignment'
+),
+
+path(
+    'view-submissions/<int:assignment_id>/',
+    views.view_submissions,
+    name='view_submissions'
+),
+
+path(
+    'delete-assignment/<int:assignment_id>/',
+    views.delete_assignment,
+    name='delete_assignment'
+),
 
     # ================== TIMETABLE ====================
     
@@ -114,5 +122,6 @@ urlpatterns = [
     path('timetable/add/', views.add_timetable, name='add_timetable'),
     path('timetable/delete/<int:id>/', views.delete_timetable, name='delete_timetable'),
     path('timetable/edit/<int:id>/', views.edit_timetable, name='edit_timetable'),
+    path('add-student/', views.add_student, name='add_student'),
 
 ]

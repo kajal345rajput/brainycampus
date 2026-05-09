@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title>Student Solutions</title>
+
+</head>
+
+<body>
+
+<h1>
+    {{ assignment.title }} Solutions
+</h1>
+
+<hr>
+
+{% for submission in submissions %}
+
+<div>
+
+    <h3>
+        Student:
+        {{ submission.student.username }}
+    </h3>
+
+    <p>
+        Submitted:
+        {{ submission.submitted_at }}
+    </p>
+
+    <a href="{{ submission.solution_file.url }}">
+        Download Solution
+    </a>
+
+</div>
+
+<hr>
+
+{% empty %}
+
+<p>No submissions yet.</p>
+
+{% endfor %}
+
+</body>
+</html>
