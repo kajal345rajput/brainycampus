@@ -55,19 +55,22 @@
     resize: vertical;
 }
 
+/* GREEN BUTTON ADDED HERE */
 .note-form button{
     width: 100%;
     padding: 12px;
-    background: #1a237e;
+    background: #28a745 !important;   /* GREEN */
     color: white;
     border: none;
     border-radius: 8px;
     cursor: pointer;
     font-weight: 600;
+    font-size: 15px;
+    transition: 0.3s ease;
 }
 
 .note-form button:hover{
-    background: #0f144f;
+    background: #1e7e34 !important;   /* DARK GREEN */
 }
 
 /* GRID */
@@ -127,4 +130,17 @@
     padding: 40px;
     color: #777;
     grid-column: 1 / -1;
+}
+
+/* PDF LINK */
+.note-card a{
+    display: inline-block;
+    margin-top: 10px;
+    color: #1a237e;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.note-card a:hover{
+    text-decoration: underline;
 }

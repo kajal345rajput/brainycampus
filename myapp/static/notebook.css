@@ -1,0 +1,108 @@
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f6f9;
+    margin: 0;
+    padding: 0;
+}
+
+/* PAGE TITLE */
+h1 {
+    text-align: center;
+    margin-top: 20px;
+    color: #333;
+}
+
+/* =========================
+   NOTEBOOK CARDS (VIEW PAGE)
+========================= */
+.card-box {
+    background: white;
+    margin: 15px auto;
+    padding: 15px;
+    width: 70%;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    transition: 0.3s;
+}
+
+.card-box:hover {
+    transform: translateY(-3px);
+}
+
+/* DOWNLOAD LINK */
+.card-box a {
+    display: inline-block;
+    margin-top: 10px;
+    color: #007bff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.card-box a:hover {
+    text-decoration: underline;
+}
+
+/* =========================
+   UPLOAD PAGE CONTAINER
+========================= */
+.upload-container {
+    width: 50%;
+    margin: 40px auto;
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+/* FORM LABELS */
+.upload-container label {
+    display: block;
+    margin-top: 12px;
+    font-weight: bold;
+    color: #333;
+}
+
+/* INPUT FIELDS */
+.upload-container input,
+.upload-container textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    outline: none;
+}
+
+/* INPUT FOCUS EFFECT */
+.upload-container input:focus,
+.upload-container textarea:focus {
+    border-color: #28a745;
+}
+
+/* GREEN UPLOAD BUTTON */
+.upload-btn {
+    width: 100%;
+    margin-top: 20px;
+    padding: 12px;
+    background: #28a745;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.upload-btn:hover {
+    background: #218838;
+}
+
+/* =========================
+   RESPONSIVE DESIGN
+========================= */
+@media (max-width: 768px) {
+    .upload-container,
+    .card-box {
+        width: 90%;
+    }
+}

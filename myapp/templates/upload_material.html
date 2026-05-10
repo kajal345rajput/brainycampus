@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'notebook.css' %}">
+
+<div class="upload-container">
+
+    <h1>📚 Upload Study Material</h1>
+
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <!-- TITLE -->
+        <label>Title</label>
+        <input type="text" name="title" required>
+
+        <!-- DESCRIPTION -->
+        <label>Description</label>
+        <textarea name="description"></textarea>
+
+        <!-- COURSE -->
+        <label>Course</label>
+        <select name="course" required>
+            <option value="BTECH">B.Tech</option>
+            <option value="BCA">BCA</option>
+            <option value="MCA">MCA</option>
+            <option value="MBA">MBA</option>
+        </select>
+
+        <!-- SEMESTER -->
+        <label>Semester</label>
+        <select name="semester" required>
+            <option value="SEM1">Sem 1</option>
+            <option value="SEM2">Sem 2</option>
+            <option value="SEM3">Sem 3</option>
+            <option value="SEM4">Sem 4</option>
+            <option value="SEM5">Sem 5</option>
+            <option value="SEM6">Sem 6</option>
+            <option value="SEM7">Sem 7</option>
+            <option value="SEM8">Sem 8</option>
+        </select>
+
+        <!-- FILE -->
+        <label>File</label>
+        <input type="file" name="file" required>
+
+        <!-- SUBMIT -->
+        <button type="submit" class="upload-btn">⬆ Upload</button>
+
+    </form>
+
+</div>
+
+{% endblock %}

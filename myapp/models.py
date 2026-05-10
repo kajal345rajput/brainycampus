@@ -67,8 +67,6 @@ class Attendance(models.Model):
     def __str__(self):
         return f"{self.student.username} - {self.subject} - {self.status}"
 
-from django.contrib.auth.models import User
-
 # ================= STUDENT =================
 class Student(models.Model):
 
@@ -160,11 +158,16 @@ class Note(models.Model):
 
     title = models.CharField(max_length=200)
 
-    content = models.TextField()
+    content = models.TextField(blank=True, null=True)
 
-    created_at = models.DateTimeField(
-        default=timezone.now
+    # NEW: PDF SUPPORT
+    pdf_file = models.FileField(
+        upload_to='notes_pdfs/',
+        blank=True,
+        null=True
     )
+
+    created_at = models.DateTimeField(default=timezone.now)
 
     class Meta:
         ordering = ['-created_at']
@@ -197,9 +200,6 @@ class StudyTracker(models.Model):
 
 
 # ================= EXAM PLANNER =================
-from django.db import models
-from django.contrib.auth.models import User
-
 
 class Exam(models.Model):
 
@@ -306,3 +306,37 @@ class Reminder(models.Model):
 
     def __str__(self):
         return self.message
+
+#======Notebook============================#
+class StudyMaterial(models.Model):
+
+    COURSE_CHOICES = [
+        ('BTECH', 'B.Tech'),
+        ('BCA', 'BCA'),
+        ('MCA', 'MCA'),
+        ('MBA', 'MBA'),
+    ]
+
+    SEMESTER_CHOICES = [
+        ('SEM1', 'Sem 1'),
+        ('SEM2', 'Sem 2'),
+        ('SEM3', 'Sem 3'),
+        ('SEM4', 'Sem 4'),
+        ('SEM5', 'Sem 5'),
+        ('SEM6', 'Sem 6'),
+        ('SEM7', 'Sem 7'),
+        ('SEM8', 'Sem 8'),
+    ]
+
+    title = models.CharField(max_length=255)
+    description = models.TextField(blank=True, null=True)
+    file = models.FileField(upload_to='study_materials/')
+
+    course = models.CharField(max_length=10, choices=COURSE_CHOICES)
+    semester = models.CharField(max_length=10, choices=SEMESTER_CHOICES)
+
+    uploaded_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title

@@ -3,8 +3,18 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib import messages
+from .forms import StudyMaterialForm
 
-from .models import Attendance, Note, Assignment, Submission, Timetable, Student, Exam
+from .models import (
+    Attendance,
+    Note,
+    Assignment,
+    Submission,
+    Timetable,
+    Student,
+    Exam,
+    StudyMaterial
+)
 
 # ================= LOGIN =================
 def login_view(request):
@@ -123,6 +133,7 @@ def attendance_view(request):
         'percentage': percentage,
     })
 # ================= NOTES =================
+
 @login_required
 def notes_view(request):
     notes = Note.objects.filter(user=request.user)
@@ -132,17 +143,30 @@ def notes_view(request):
 @login_required
 def add_note(request):
     if request.method == "POST":
-        Note.objects.create(
-            user=request.user,
-            title=request.POST.get('title'),
-            content=request.POST.get('content')
-        )
+
+        title = request.POST.get('title')
+        content = request.POST.get('content')
+        pdf_file = request.FILES.get('pdf_file')
+
+        # DEBUG (optional)
+        print("TITLE:", title)
+        print("PDF:", pdf_file)
+
+        if title:   # important check
+            Note.objects.create(
+                user=request.user,
+                title=title,
+                content=content,
+                pdf_file=pdf_file
+            )
+
     return redirect('notes')
 
 
 @login_required
 def delete_note(request, id):
-    get_object_or_404(Note, id=id, user=request.user).delete()
+    note = get_object_or_404(Note, id=id, user=request.user)
+    note.delete()
     return redirect('notes')
 
 # ================= ASSIGNMENT PAGE =================
@@ -408,3 +432,72 @@ def exam_delete(request, pk):
         return redirect('exam_list')
 
     return render(request, 'examplanner/exam_confirm_delete.html', {'exam': exam})
+
+# ================= NOTEBOOK VIEW =================
+
+@login_required
+def notebook_view(request):
+
+    user = request.user
+
+    # 👨‍🎓 STUDENT → ONLY THEIR COURSE + SEMESTER MATERIAL
+    if not user.is_staff:
+        try:
+            student = user.student
+
+            materials = StudyMaterial.objects.filter(
+                course=student.course,
+                semester=student.semester
+            ).order_by('-created_at')
+
+        except:
+            materials = StudyMaterial.objects.none()
+
+    # TEACHER : ONLY THEIR UPLOADED MATERIAL
+    else:
+        materials = StudyMaterial.objects.filter(
+            uploaded_by=user
+        ).order_by('-created_at')
+
+    return render(request, 'notebook.html', {
+        'materials': materials
+    })
+
+
+# ================= UPLOAD MATERIAL =================
+@login_required
+def upload_material(request):
+
+    # ONLY TEACHERS CAN UPLOAD
+    if not request.user.is_staff:
+        return redirect('notebook')
+
+    if request.method == 'POST':
+        form = StudyMaterialForm(request.POST, request.FILES)
+
+        if form.is_valid():
+            material = form.save(commit=False)
+            material.uploaded_by = request.user
+            material.save()
+            return redirect('notebook')
+
+    else:
+        form = StudyMaterialForm()
+
+    return render(request, 'upload_material.html', {
+        'form': form
+    })
+
+
+# ================= DELETE MATERIAL =================
+@login_required
+def delete_material(request, pk):
+
+    material = get_object_or_404(StudyMaterial, id=pk)
+
+    # ONLY OWNER TEACHER CAN DELETE
+    if request.user != material.uploaded_by:
+        return redirect('notebook')
+
+    material.delete()
+    return redirect('notebook')

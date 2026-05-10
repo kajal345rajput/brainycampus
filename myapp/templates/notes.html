@@ -15,17 +15,22 @@
     </div>
 
     <!-- ADD NOTE FORM -->
-    <form method="POST" action="{% url 'add_note' %}" class="note-form">
+    <form method="post" enctype="multipart/form-data" action="{% url 'add_note' %}" class="note-form">
         {% csrf_token %}
 
         <div class="form-group">
             <label>Note Title</label>
-            <input type="text" name="title" placeholder="Enter a clear title..." required>
+            <input type="text" name="title" placeholder="Enter title..." required>
         </div>
 
         <div class="form-group">
             <label>Content</label>
-            <textarea name="content" placeholder="Start writing your note here..." required></textarea>
+            <textarea name="content" placeholder="Start writing..." rows="5"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label>Upload PDF (optional)</label>
+            <input type="file" name="pdf_file" accept="application/pdf">
         </div>
 
         <button type="submit">➕ Add Note</button>
@@ -35,20 +40,40 @@
     <div class="notes-grid">
 
         {% for note in notes %}
+
         <div class="note-card">
+
             <div class="note-title">{{ note.title }}</div>
-            <div class="note-content">{{ note.content }}</div>
+
+            <div class="note-content">
+                {{ note.content }}
+            </div>
+
+            {% if note.pdf_file %}
+            <div class="pdf-link">
+                <a href="{{ note.pdf_file.url }}" target="_blank">
+                    📄 View PDF
+                </a>
+            </div>
+            {% endif %}
 
             <div class="note-footer">
-                <small>📅 {{ note.created_at }}</small>
-                <a href="{% url 'delete_note' note.id %}" class="delete-btn">Delete</a>
+                <span>{{ note.created_at }}</span>
+
+                <a class="delete-btn" href="{% url 'delete_note' note.id %}">
+                    🗑 Delete
+                </a>
             </div>
+
         </div>
+
         {% empty %}
+
         <div class="empty-state">
             <h3>No notes yet</h3>
             <p>Start by creating your first note above ✍️</p>
         </div>
+
         {% endfor %}
 
     </div>

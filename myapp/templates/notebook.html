@@ -1,0 +1,76 @@
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'notebook.css' %}">
+
+<h1 style="text-align:center;">📚 Study Materials</h1>
+
+<!-- UPLOAD BUTTON (ONLY TEACHER) -->
+{% if user.is_staff %}
+<div style="text-align:center; margin-bottom:20px;">
+    <a href="{% url 'upload_material' %}"
+       style="background:green;color:white;padding:10px 15px;
+       border-radius:8px;text-decoration:none;">
+        ➕ Upload Material
+    </a>
+</div>
+{% endif %}
+
+<hr>
+
+<!-- MATERIAL LIST -->
+{% for m in materials %}
+<div style="border:1px solid #ddd; padding:15px; margin:15px;
+            border-radius:10px; background:#fff;">
+
+    <!-- TITLE -->
+    <h3>📘 {{ m.title }}</h3>
+
+    <!-- DESCRIPTION -->
+    <p>{{ m.description }}</p>
+
+    <!-- COURSE + SEMESTER INFO -->
+    <p>
+        <b>Course:</b> {{ m.course }} |
+        <b>Semester:</b> {{ m.semester }}
+    </p>
+
+    <!-- FILE ACTIONS -->
+    {% if m.file %}
+        <div style="margin-top:10px;">
+
+            <!-- VIEW FILE -->
+            <a href="{{ m.file.url }}" target="_blank"
+               style="background:#007bff;color:white;padding:6px 12px;
+               border-radius:5px;text-decoration:none;">
+                📂 View File
+            </a>
+
+            <!-- DOWNLOAD FILE -->
+            <a href="{{ m.file.url }}" download
+               style="background:green;color:white;padding:6px 12px;
+               border-radius:5px;text-decoration:none;margin-left:5px;">
+                📥 Download
+            </a>
+
+        </div>
+    {% endif %}
+
+    <!-- UPLOADED BY -->
+    <p style="margin-top:10px;font-size:12px;color:gray;">
+        Uploaded by: {{ m.uploaded_by }}
+    </p>
+
+    <!-- DELETE (ONLY OWNER TEACHER) -->
+    {% if user == m.uploaded_by %}
+        <a href="{% url 'delete_material' m.id %}"
+           onclick="return confirm('Delete this material?')"
+           style="color:red;display:inline-block;margin-top:8px;">
+            🗑 Delete
+        </a>
+    {% endif %}
+
+</div>
+
+{% empty %}
+<p style="text-align:center;">No study material available.</p>
+{% endfor %}
