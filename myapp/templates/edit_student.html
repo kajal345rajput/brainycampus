@@ -13,7 +13,7 @@
     <h2 style="text-align:center;
                margin-bottom:25px;
                color:#333;">
-        👨‍🎓 Add Student
+        Edit Student
     </h2>
 
     <form method="POST">
@@ -21,25 +21,14 @@
         {% csrf_token %}
 
         <!-- STUDENT NAME -->
-        <label style="font-weight:bold;">Student Name</label>
+        <label style="font-weight:bold;">
+            Student Name
+        </label>
 
         <input type="text"
                name="username"
+               value="{{ student.user.username }}"
                required
-               placeholder="Enter student name"
-               style="width:100%;
-                      padding:12px;
-                      margin:6px 0 18px 0;
-                      border:1px solid #ccc;
-                      border-radius:8px;">
-
-        <!-- PASSWORD -->
-        <label style="font-weight:bold;">Password</label>
-
-        <input type="password"
-               name="password"
-               required
-               placeholder="Enter password"
                style="width:100%;
                       padding:12px;
                       margin:6px 0 18px 0;
@@ -47,12 +36,14 @@
                       border-radius:8px;">
 
         <!-- ENROLLMENT -->
-        <label style="font-weight:bold;">Enrollment Number</label>
+        <label style="font-weight:bold;">
+            Enrollment Number
+        </label>
 
         <input type="text"
                name="enrollment_no"
+               value="{{ student.enrollment_no }}"
                required
-               placeholder="Enter enrollment number"
                style="width:100%;
                       padding:12px;
                       margin:6px 0 18px 0;
@@ -60,7 +51,9 @@
                       border-radius:8px;">
 
         <!-- COURSE -->
-        <label style="font-weight:bold;">Course</label>
+        <label style="font-weight:bold;">
+            Course
+        </label>
 
         <select name="course"
                 required
@@ -80,7 +73,9 @@
         </select>
 
         <!-- SEMESTER -->
-        <label style="font-weight:bold;">Semester</label>
+        <label style="font-weight:bold;">
+            Semester
+        </label>
 
         <select name="semester"
                 required
@@ -98,16 +93,14 @@
             <option value="SEM4">Sem 4</option>
             <option value="SEM5">Sem 5</option>
             <option value="SEM6">Sem 6</option>
-            <option value="SEM7">Sem 7</option>
-            <option value="SEM8">Sem 8</option>
 
         </select>
 
-        <!-- ADD BUTTON -->
+        <!-- UPDATE BUTTON -->
         <button type="submit"
                 style="width:100%;
                        margin-top:10px;
-                       background:#28a745;
+                       background:#007bff;
                        color:white;
                        padding:14px;
                        border:none;
@@ -115,29 +108,11 @@
                        font-size:16px;
                        cursor:pointer;">
 
-            ➕ Add Student
+            Update Student
 
         </button>
 
     </form>
-
-    <!-- VIEW STUDENTS BUTTON -->
-    <div style="text-align:center;
-                margin-top:20px;">
-
-        <a href="{% url 'view_students' %}"
-           style="background:#007bff;
-                  color:white;
-                  padding:12px 20px;
-                  border-radius:8px;
-                  text-decoration:none;
-                  display:inline-block;">
-
-            👨‍🎓 View All Students
-
-        </a>
-
-    </div>
 
 </div>
 

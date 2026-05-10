@@ -1,0 +1,118 @@
+body{
+    background:#f4f6f9;
+    font-family:Arial, sans-serif;
+}
+
+/* PAGE TITLE */
+.page-title{
+    text-align:center;
+    margin:30px 0;
+    color:#222;
+    font-size:32px;
+    font-weight:bold;
+}
+
+/* MAIN CONTAINER */
+.students-container{
+    width:90%;
+    max-width:1000px;
+    margin:auto;
+}
+
+/* STUDENT CARD */
+.student-card{
+    background:white;
+    border-radius:12px;
+    padding:25px;
+    margin-bottom:20px;
+    box-shadow:0 2px 10px rgba(0,0,0,0.08);
+    transition:0.3s;
+}
+
+.student-card:hover{
+    transform:translateY(-2px);
+    box-shadow:0 5px 15px rgba(0,0,0,0.12);
+}
+
+/* STUDENT NAME */
+.student-name{
+    font-size:24px;
+    font-weight:bold;
+    color:#333;
+    margin-bottom:15px;
+}
+
+/* INFO */
+.student-info{
+    font-size:16px;
+    color:#555;
+    margin-bottom:10px;
+    line-height:1.8;
+}
+
+/* BUTTON AREA */
+.button-group{
+    margin-top:20px;
+}
+
+/* EDIT BUTTON */
+.edit-btn{
+    background:#007bff;
+    color:white;
+    padding:10px 18px;
+    border-radius:8px;
+    text-decoration:none;
+    margin-right:10px;
+    display:inline-block;
+    font-size:15px;
+    transition:0.3s;
+}
+
+.edit-btn:hover{
+    background:#0056b3;
+}
+
+/* DELETE BUTTON */
+.delete-btn{
+    background:#dc3545;
+    color:white;
+    padding:10px 18px;
+    border-radius:8px;
+    text-decoration:none;
+    display:inline-block;
+    font-size:15px;
+    transition:0.3s;
+}
+
+.delete-btn:hover{
+    background:#b52a37;
+}
+
+/* ADD BUTTON */
+.add-student-btn{
+    display:block;
+    width:220px;
+    margin:30px auto;
+    text-align:center;
+    background:#28a745;
+    color:white;
+    padding:14px;
+    border-radius:10px;
+    text-decoration:none;
+    font-size:17px;
+    transition:0.3s;
+}
+
+.add-student-btn:hover{
+    background:#1f7a34;
+}
+
+/* EMPTY MESSAGE */
+.empty-box{
+    background:white;
+    padding:20px;
+    border-radius:10px;
+    text-align:center;
+    color:#666;
+    box-shadow:0 2px 10px rgba(0,0,0,0.08);
+}

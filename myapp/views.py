@@ -342,6 +342,7 @@ def edit_timetable(request, id):
     })
 
     # ================= Student =================
+# ================= ADD STUDENT =================
 @login_required
 def add_student(request):
 
@@ -354,7 +355,18 @@ def add_student(request):
         password = request.POST.get('password')
 
         enrollment_no = request.POST.get('enrollment_no')
-        class_name = request.POST.get('class_name')
+
+        course = request.POST.get('course')
+        semester = request.POST.get('semester')
+
+        # COMBINE COURSE + SEMESTER
+        class_name = f"{course}-{semester}"
+
+        # PREVENT DUPLICATE USERNAME
+        if User.objects.filter(username=username).exists():
+
+            messages.error(request, "Username already exists!")
+            return redirect('add_student')
 
         # CREATE USER
         user = User.objects.create_user(
@@ -369,9 +381,84 @@ def add_student(request):
             class_name=class_name
         )
 
-        return redirect('add_student')
+        messages.success(request, "Student added successfully!")
+
+        return redirect('view_students')
 
     return render(request, 'add_student.html')
+
+
+# ================= VIEW ALL STUDENTS =================
+@login_required
+def view_students(request):
+
+    if not request.user.is_staff:
+        return redirect('home')
+
+    students = Student.objects.select_related(
+        'user'
+    ).all().order_by('-id')
+
+    return render(request, 'view_students.html', {
+        'students': students
+    })
+
+
+# ================= EDIT STUDENT =================
+@login_required
+def edit_student(request, pk):
+
+    if not request.user.is_staff:
+        return redirect('home')
+
+    student = get_object_or_404(Student, id=pk)
+
+    if request.method == "POST":
+
+        username = request.POST.get('username')
+        enrollment_no = request.POST.get('enrollment_no')
+
+        course = request.POST.get('course')
+        semester = request.POST.get('semester')
+
+        # COMBINE COURSE + SEMESTER
+        class_name = f"{course}-{semester}"
+
+        # UPDATE USER
+        student.user.username = username
+        student.user.save()
+
+        # UPDATE STUDENT
+        student.enrollment_no = enrollment_no
+        student.class_name = class_name
+
+        student.save()
+
+        messages.success(request, "Student updated successfully!")
+
+        return redirect('view_students')
+
+    return render(request, 'edit_student.html', {
+        'student': student
+    })
+
+
+# ================= DELETE STUDENT =================
+@login_required
+def delete_student(request, pk):
+
+    if not request.user.is_staff:
+        return redirect('home')
+
+    student = get_object_or_404(Student, id=pk)
+
+    # DELETE USER
+    # STUDENT AUTO DELETES DUE TO OneToOneField
+    student.user.delete()
+
+    messages.success(request, "Student deleted successfully!")
+
+    return redirect('view_students')
 
     # ================= EXAM PLANNER =================
 @login_required
@@ -501,3 +588,6 @@ def delete_material(request, pk):
 
     material.delete()
     return redirect('notebook')
+
+ 
+  

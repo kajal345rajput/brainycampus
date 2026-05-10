@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<link rel="stylesheet"
+      href="{% static 'css/view_students.css' %}">
+
+<h1 class="page-title">
+    Student Management
+</h1>
+
+<div class="students-container">
+
+    {% for student in students %}
+
+    <div class="student-card">
+
+        <div class="student-name">
+            {{ student.user.username }}
+        </div>
+
+        <div class="student-info">
+            <strong>Enrollment Number:</strong>
+            {{ student.enrollment_no }}
+        </div>
+
+        <div class="student-info">
+            <strong>Class:</strong>
+            {{ student.class_name }}
+        </div>
+
+        <div class="button-group">
+
+            <a href="{% url 'edit_student' student.id %}"
+               class="edit-btn">
+                Edit
+            </a>
+
+            <a href="{% url 'delete_student' student.id %}"
+               class="delete-btn"
+               onclick="return confirm('Are you sure you want to delete this student?')">
+                Delete
+            </a>
+
+        </div>
+
+    </div>
+
+    {% empty %}
+
+    <div class="empty-box">
+        No students available.
+    </div>
+
+    {% endfor %}
+
+</div>
+
+<a href="{% url 'add_student' %}"
+   class="add-student-btn">
+    Add New Student
+</a>
+
+{% endblock %}

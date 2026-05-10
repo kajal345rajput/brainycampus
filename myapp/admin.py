@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .models import (
-    Timetable, Attendance, Assignment, Note,
+    Timetable, Attendance, Assignment, Note, 
     StudyTracker,
     Exam,    
     Grade, Library, Event, Reminder
@@ -16,3 +16,5 @@ admin.site.register(Grade)
 admin.site.register(Library)
 admin.site.register(Event)
 admin.site.register(Reminder)
+ 
+ 

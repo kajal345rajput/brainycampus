@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
-
 <!-- HERO SECTION -->
 <section class="hero" id="home">
   <div class="hero-content">
@@ -14,14 +14,100 @@
 </section>
 
 <!-- ABOUT SECTION -->
-<section id="about" class="section">
-    <h2>About Us</h2>
-    <p>
-        BrainyCampus is a smart academic system that helps students manage attendance,
-        assignments, notes, and academic planning in one place.
-    </p>
-</section>
+<section id="about" class="about-section">
 
+    <div class="about-container">
+
+        <!-- LEFT SIDE -->
+        <div class="about-left">
+
+            <h4>ABOUT THE PROJECT</h4>
+
+            <h2>
+                BrainyCampus – Smart Academic Management System
+
+            </h2>
+
+            <p>
+                BrainyCampus is a modern academic organizer developed
+                for students and educational institutions to manage
+                academic activities digitally through a centralized platform.
+            </p>
+
+            <p>
+                The system helps students manage attendance, assignments,
+                notes, exams, schedules, and study planning efficiently.
+                It also provides role-based access for students and faculty
+                members with a clean and user-friendly interface.
+
+            </p>
+
+            <div class="about-highlights">
+
+                <div class="highlight-box">
+                    <h3>🎯 Objective</h3>
+                    <p>
+                        Simplify academic management and improve productivity.
+
+                    </p>
+                </div>
+
+                <div class="highlight-box">
+                    <h3>⚡ Technologies</h3>
+                    <p>
+                        Django, Python, HTML, CSS and SQLite3.
+
+                    </p>
+                </div>
+
+                <div class="highlight-box">
+                    <h3>🔒 Secure Access</h3>
+                    <p>
+                        Authentication system with admin and student roles.
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- RIGHT SIDE -->
+        <div class="about-right">
+
+            <div class="about-card">
+
+                <h3>📚 Core Modules</h3>
+
+                <ul>
+                    <li>Attendance Management</li>
+                    <li>Assignment Tracker</li>
+                    <li>Notes & Notebook</li>
+                    <li>Exam Planner</li>
+                    <li>Timetable Scheduler</li>
+                    <li>Event Manager</li>
+                </ul>
+
+            </div>
+
+            <div class="about-card">
+
+                <h3>🚀 Project Benefits</h3>
+
+                <ul>
+                    <li>Centralized academic platform</li>
+                    <li>Improves productivity</li>
+                    <li>Easy access to records</li>
+                    <li>Modern responsive design</li>
+                    <li>Simple and user-friendly UI</li>
+                </ul>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
 
 <!-- FEATURES -->
 <section class="features" id="features">
@@ -115,16 +201,54 @@
 </section>
 
 <!-- CONTACT SECTION -->
-<section id="contact" class="section">
-    <h2>Contact Us</h2>
+<section id="contact" class="contact-section">
 
-    <form method="POST">
-        {% csrf_token %}
-        <input type="text" placeholder="Your Name">
-        <input type="email" placeholder="Your Email">
-        <textarea placeholder="Message"></textarea>
-        <button type="submit">Send</button>
-    </form>
+    <div class="contact-header">
+
+        <h2>Contact Us</h2>
+
+        <p>
+            Have questions, feedback, or suggestions regarding BrainyCampus?
+            Feel free to contact us anytime.
+
+        </p>
+
+    </div>
+
+    <div class="contact-container">
+
+        <div class="contact-info">
+
+            <!-- MEMBER 1 -->
+            <div class="contact-card team-card">
+
+                <img src="{% static 'images/kajal.jpeg' %}" alt="Kajal">
+
+                <h3>Kajal Kumari</h3>
+
+                <p>MCA Student</p>
+
+                <p> kajal345rajput@gmail.com</p>
+
+            </div>
+
+            <!-- MEMBER 2 -->
+            <div class="contact-card team-card">
+
+                <img src="{% static 'images/srishti.jpeg' %}" alt="Srishti">
+
+                <h3>Srishti Garg</h3>
+
+                <p>MCA Student</p>
+
+                <p> gargsrishti83@gmail.com</p>
+
+            </div>
+
+        </div>
+
+    </div>
+
 </section>
 
 {% endblock %}

@@ -37,4 +37,10 @@ urlpatterns = [
     path('notebook/', views.notebook_view, name='notebook'),
     path('notebook/upload/', views.upload_material, name='upload_material'),
     path('delete-material/<int:pk>/', views.delete_material, name='delete_material'),
+
+    #============= ADD STUDENT==============#
+    path('students/add/', views.add_student, name='add_student'),
+    path('students/', views.view_students, name='view_students'),
+    path('students/edit/<int:pk>/', views.edit_student, name='edit_student'),
+    path('students/delete/<int:pk>/', views.delete_student, name='delete_student'),
 ]
