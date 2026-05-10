@@ -1,5 +1,5 @@
 from django import forms
-from .models import Timetable, Attendance, Assignment,StudyMaterial
+from .models import Timetable, Attendance, Assignment,StudyMaterial, Event 
 
 
 class TimetableForm(forms.ModelForm):
@@ -24,3 +24,9 @@ class StudyMaterialForm(forms.ModelForm):
     class Meta:
         model = StudyMaterial
         fields = ['title', 'description', 'file', 'course', 'semester']
+
+#=============EVENTS=================#
+class EventForm(forms.ModelForm):
+    class Meta:
+        model = Event
+        fields = ['message'] 

@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<section class="module-container">
+
+    <h2>📢 Event Messages</h2>
+
+    <!-- ADD EVENT BUTTON (ADMIN ONLY) -->
+    {% if request.user.is_staff %}
+        <div style="text-align:right; margin-bottom:20px;">
+            <a href="{% url 'add_event' %}">
+                <button class="login-btn">➕ Add Event</button>
+            </a>
+        </div>
+    {% endif %}
+
+    {% for event in events %}
+
+        <div class="card" style="margin:15px 0; padding:20px;">
+
+            <p>{{ event.message }}</p>
+
+            {% if request.user.is_staff %}
+                <a href="{% url 'delete_event' event.id %}">
+                    <button class="logout-btn">Delete</button>
+                </a>
+            {% endif %}
+
+        </div>
+
+    {% empty %}
+        <p>No events yet.</p>
+    {% endfor %}
+
+</section>
+
+{% endblock %}

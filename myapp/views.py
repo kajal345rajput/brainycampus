@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib import messages
 from .forms import StudyMaterialForm
+from .forms import EventForm
 
 from .models import (
     Attendance,
@@ -13,7 +14,8 @@ from .models import (
     Timetable,
     Student,
     Exam,
-    StudyMaterial
+    StudyMaterial,
+    Event
 )
 
 # ================= LOGIN =================
@@ -589,5 +591,41 @@ def delete_material(request, pk):
     material.delete()
     return redirect('notebook')
 
- 
-  
+#===============EVENTS===================#
+#ADD EVENT
+@login_required
+def add_event(request):
+
+    if not request.user.is_staff:
+        return redirect('event_list')
+
+    if request.method == "POST":
+        form = EventForm(request.POST)
+
+        if form.is_valid():
+            event = form.save(commit=False)
+            event.created_by = request.user
+            event.save()
+            return redirect('event_list')
+
+    else:
+        form = EventForm()
+
+    return render(request, 'add_event.html', {'form': form})
+    # ================= EVENT LIST =================
+@login_required
+def event_list(request):
+    events = Event.objects.all().order_by('-id')
+    return render(request, 'event.html', {'events': events})
+
+    #===============delete EVENTS =================#
+@login_required
+def delete_event(request, event_id):
+
+    if not request.user.is_staff:
+        return redirect('event_list')
+
+    event = get_object_or_404(Event, id=event_id)
+    event.delete()
+
+    return redirect('event_list')

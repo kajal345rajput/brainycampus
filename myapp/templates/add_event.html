@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<section class="module-container">
+
+    <h2>📢 Add Event (Admin Only)</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        {{ form.as_p }}
+
+        <button type="submit" class="login-btn">
+            Add Event
+        </button>
+    </form>
+
+</section>
+
+{% endblock %}

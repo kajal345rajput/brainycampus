@@ -175,30 +175,6 @@ class Note(models.Model):
     def __str__(self):
         return self.title
 
-# ================= STUDY TRACKER =================
-class StudyTracker(models.Model):
-
-    user = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        related_name="study_logs"
-    )
-
-    date = models.DateField(
-        default=timezone.now
-    )
-
-    hours_studied = models.FloatField(
-        validators=[MinValueValidator(0)]
-    )
-
-    class Meta:
-        ordering = ['-date']
-
-    def __str__(self):
-        return f"{self.user.username} - {self.hours_studied} hrs"
-
-
 # ================= EXAM PLANNER =================
 
 class Exam(models.Model):
@@ -226,86 +202,13 @@ class Exam(models.Model):
     def __str__(self):
         return self.title
 
-# ================= GRADES =================
-class Grade(models.Model):
-
-    user = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        related_name="grades"
-    )
-
-    subject = models.CharField(max_length=100)
-
-    marks = models.FloatField()
-
-    class Meta:
-        ordering = ['subject']
-
-    def __str__(self):
-        return f"{self.subject} - {self.marks}"
-
-
-# ================= LIBRARY =================
-class Library(models.Model):
-
-    user = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        related_name="books"
-    )
-
-    book_name = models.CharField(max_length=200)
-
-    issue_date = models.DateField()
-
-    return_date = models.DateField()
-
-    class Meta:
-        ordering = ['return_date']
-
-    def __str__(self):
-        return self.book_name
-
-
 # ================= EVENTS =================
 class Event(models.Model):
-
-    user = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        related_name="events"
-    )
-
-    title = models.CharField(max_length=200)
-
-    event_date = models.DateField()
-
-    class Meta:
-        ordering = ['event_date']
+    message = models.TextField()
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"{self.title} - {self.event_date}"
-
-
-# ================= REMINDERS =================
-class Reminder(models.Model):
-
-    user = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        related_name="reminders"
-    )
-
-    message = models.CharField(max_length=255)
-
-    reminder_date = models.DateTimeField()
-
-    class Meta:
-        ordering = ['reminder_date']
-
-    def __str__(self):
-        return self.message
+        return self.message[:30]
 
 #======Notebook============================#
 class StudyMaterial(models.Model):
