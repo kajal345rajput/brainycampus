@@ -1,21 +1,15 @@
 from django.contrib import admin
 from django.urls import path, include
-
 from django.conf import settings
 from django.conf.urls.static import static
 
-
 urlpatterns = [
-
     path('admin/', admin.site.urls),
 
-    # connect your app
     path('', include('myapp.urls')),
-
 ]
 
-
-# MEDIA FILES
+# MEDIA FILES ONLY
 urlpatterns += static(
     settings.MEDIA_URL,
     document_root=settings.MEDIA_ROOT

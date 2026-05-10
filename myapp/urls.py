@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from . import views
 
 from .views import (
@@ -10,12 +10,6 @@ from .views import (
     notes_view,
     add_note,
     delete_note,
-
-    # TODO
-    todo_list,
-    add_todo,
-    complete_todo,
-    delete_todo,
 
     # ASSIGNMENT
     assignment_view,
@@ -65,32 +59,7 @@ urlpatterns = [
         name='delete_note'
     ),
 
-    # ================= TODO =================
-    path(
-        'todo/',
-        todo_list,
-        name='todo'
-    ),
-
-    path(
-        'todo/add/',
-        add_todo,
-        name='add_todo'
-    ),
-
-    path(
-        'todo/complete/<int:pk>/',
-        complete_todo,
-        name='complete_todo'
-    ),
-
-    path(
-        'todo/delete/<int:pk>/',
-        delete_todo,
-        name='delete_todo'
-    ),
-
-    # ================= ASSIGNMENT =================
+     # ================= ASSIGNMENT =================
 
 path(
     'assignments/',
@@ -123,5 +92,7 @@ path(
     path('timetable/delete/<int:id>/', views.delete_timetable, name='delete_timetable'),
     path('timetable/edit/<int:id>/', views.edit_timetable, name='edit_timetable'),
     path('add-student/', views.add_student, name='add_student'),
-
+   
+   #==============EXAMPLANNER=======#
+   path('', include('myapp.exam_urls')),
 ]

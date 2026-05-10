@@ -16,7 +16,7 @@ class Timetable(models.Model):
         ('Saturday', 'Saturday'),
     ]
 
-    class_name = models.CharField(max_length=50)  # 👈 CLASS BASED (CSE-A, BCA-1)
+    class_name = models.CharField(max_length=50)  #  CLASS BASED (CSE-A, BCA-1)
 
     day = models.CharField(max_length=20, choices=DAY_CHOICES)
     subject = models.CharField(max_length=100)
@@ -172,48 +172,6 @@ class Note(models.Model):
     def __str__(self):
         return self.title
 
-
-# ================= TODO =================
-class Todo(models.Model):
-
-    PRIORITY_CHOICES = [
-        ('LOW', 'Low'),
-        ('MEDIUM', 'Medium'),
-        ('HIGH', 'High'),
-    ]
-
-    user = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        related_name="todos"
-    )
-
-    title = models.CharField(max_length=255)
-
-    description = models.TextField(
-        blank=True,
-        null=True
-    )
-
-    is_completed = models.BooleanField(default=False)
-
-    priority = models.CharField(
-        max_length=10,
-        choices=PRIORITY_CHOICES,
-        default='MEDIUM'
-    )
-
-    created_at = models.DateTimeField(
-        default=timezone.now
-    )
-
-    class Meta:
-        ordering = ['-created_at']
-
-    def __str__(self):
-        return self.title
-
-
 # ================= STUDY TRACKER =================
 class StudyTracker(models.Model):
 
@@ -239,24 +197,34 @@ class StudyTracker(models.Model):
 
 
 # ================= EXAM PLANNER =================
-class ExamPlanner(models.Model):
+from django.db import models
+from django.contrib.auth.models import User
 
-    user = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        related_name="exams"
-    )
 
+class Exam(models.Model):
+
+    CLASS_CHOICES = [
+        ('CSE-A', 'CSE-A'),
+        ('CSE-B', 'CSE-B'),
+        ('CIVIL', 'CIVIL'),
+        ('MECH', 'MECH'),
+    ]
+
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    title = models.CharField(max_length=200)
     subject = models.CharField(max_length=100)
+    class_name = models.CharField(max_length=20, choices=CLASS_CHOICES)
 
     exam_date = models.DateField()
+    exam_time = models.TimeField()
 
-    class Meta:
-        ordering = ['exam_date']
+    description = models.TextField(blank=True, null=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.subject} - {self.exam_date}"
-
+        return self.title
 
 # ================= GRADES =================
 class Grade(models.Model):

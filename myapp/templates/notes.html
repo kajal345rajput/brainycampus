@@ -7,15 +7,27 @@
 
 {% block content %}
 
-<div class="notes-container">
+<div class="notes-wrapper">
 
-    <h1>📒 My Notes</h1>
+    <div class="notes-header">
+        <h1>📒 My Notes</h1>
+        <p>Write, save, and manage your personal notes easily</p>
+    </div>
 
     <!-- ADD NOTE FORM -->
     <form method="POST" action="{% url 'add_note' %}" class="note-form">
         {% csrf_token %}
-        <input type="text" name="title" placeholder="Note Title" required>
-        <textarea name="content" placeholder="Write your note..." required></textarea>
+
+        <div class="form-group">
+            <label>Note Title</label>
+            <input type="text" name="title" placeholder="Enter a clear title..." required>
+        </div>
+
+        <div class="form-group">
+            <label>Content</label>
+            <textarea name="content" placeholder="Start writing your note here..." required></textarea>
+        </div>
+
         <button type="submit">➕ Add Note</button>
     </form>
 
@@ -24,15 +36,19 @@
 
         {% for note in notes %}
         <div class="note-card">
-            <h3>{{ note.title }}</h3>
-            <p>{{ note.content }}</p>
+            <div class="note-title">{{ note.title }}</div>
+            <div class="note-content">{{ note.content }}</div>
 
-            <small>{{ note.created_at }}</small>
-
-            <a href="{% url 'delete_note' note.id %}" class="delete-btn">Delete</a>
+            <div class="note-footer">
+                <small>📅 {{ note.created_at }}</small>
+                <a href="{% url 'delete_note' note.id %}" class="delete-btn">Delete</a>
+            </div>
         </div>
         {% empty %}
-        <p>No notes yet. Start adding!</p>
+        <div class="empty-state">
+            <h3>No notes yet</h3>
+            <p>Start by creating your first note above ✍️</p>
+        </div>
         {% endfor %}
 
     </div>

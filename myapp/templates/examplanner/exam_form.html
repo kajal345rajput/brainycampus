@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container">
+
+<h2>📘 Exam Form</h2>
+
+<form method="post">
+    {% csrf_token %}
+
+    <input type="text" name="title" placeholder="Exam Title"
+        value="{{ exam.title|default:'' }}" required>
+    <br><br>
+
+    <input type="text" name="subject" placeholder="Subject"
+        value="{{ exam.subject|default:'' }}" required>
+    <br><br>
+
+    <input type="text" name="class_name" placeholder="Class (CSE-A)"
+        value="{{ exam.class_name|default:'' }}" required>
+    <br><br>
+
+    <input type="date" name="exam_date"
+        value="{{ exam.exam_date|default:'' }}" required>
+    <br><br>
+
+    <input type="time" name="exam_time"
+        value="{{ exam.exam_time|default:'' }}" required>
+    <br><br>
+
+    <textarea name="description" placeholder="Description">
+        {{ exam.description|default:'' }}
+    </textarea>
+    <br><br>
+
+    <button type="submit">Save Exam</button>
+
+</form>
+
+</div>
+
+{% endblock %}

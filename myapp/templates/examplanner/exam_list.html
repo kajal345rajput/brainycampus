@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container">
+
+    <h2>📅 Exam Planner</h2>
+
+    {% if user.is_staff %}
+        <a href="{% url 'exam_create' %}">
+            ➕ Add Exam
+        </a>
+    {% endif %}
+
+    <hr>
+
+    {% for exam in exams %}
+
+        <div style="border:1px solid #ddd; padding:10px; margin-bottom:10px;">
+
+            <h3>{{ exam.title }}</h3>
+
+            <p><b>Subject:</b> {{ exam.subject }}</p>
+            <p><b>Class:</b> {{ exam.class_name }}</p>
+            <p><b>Date:</b> {{ exam.exam_date }}</p>
+            <p><b>Time:</b> {{ exam.exam_time }}</p>
+
+            <p>{{ exam.description }}</p>
+
+            {% if user.is_staff %}
+                <a href="{% url 'exam_edit' exam.id %}">✏ Edit</a>
+                |
+                <a href="{% url 'exam_delete' exam.id %}">🗑 Delete</a>
+            {% endif %}
+
+        </div>
+
+    {% empty %}
+        <p>No exams scheduled.</p>
+    {% endfor %}
+
+</div>
+
+{% endblock %}

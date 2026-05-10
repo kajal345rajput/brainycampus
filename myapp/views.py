@@ -4,8 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib import messages
 
-from .models import Attendance, Note, Todo, Assignment, Submission, Timetable, Student
-
+from .models import Attendance, Note, Assignment, Submission, Timetable, Student, Exam
 
 # ================= LOGIN =================
 def login_view(request):
@@ -145,40 +144,6 @@ def add_note(request):
 def delete_note(request, id):
     get_object_or_404(Note, id=id, user=request.user).delete()
     return redirect('notes')
-
-
-# ================= TODO =================
-@login_required
-def todo_list(request):
-    todos = Todo.objects.filter(user=request.user)
-    return render(request, 'todo.html', {'todos': todos})
-
-
-@login_required
-def add_todo(request):
-    if request.method == "POST":
-        Todo.objects.create(
-            user=request.user,
-            title=request.POST.get('title'),
-            description=request.POST.get('description'),
-            priority=request.POST.get('priority')
-        )
-    return redirect('todo')
-
-
-@login_required
-def complete_todo(request, pk):
-    todo = get_object_or_404(Todo, id=pk, user=request.user)
-    todo.is_completed = True
-    todo.save()
-    return redirect('todo')
-
-
-@login_required
-def delete_todo(request, pk):
-    get_object_or_404(Todo, id=pk, user=request.user).delete()
-    return redirect('todo')
-
 
 # ================= ASSIGNMENT PAGE =================
 @login_required
@@ -383,3 +348,63 @@ def add_student(request):
         return redirect('add_student')
 
     return render(request, 'add_student.html')
+
+    # ================= EXAM PLANNER =================
+@login_required
+def exam_list(request):
+    exams = Exam.objects.all().order_by('exam_date')
+    return render(request, 'examplanner/exam_list.html', {'exams': exams})
+
+
+@login_required
+def exam_create(request):
+    if not request.user.is_staff:
+        return redirect('exam_list')
+
+    if request.method == "POST":
+        Exam.objects.create(
+            created_by=request.user,
+            title=request.POST.get('title'),
+            subject=request.POST.get('subject'),
+            class_name=request.POST.get('class_name'),
+            exam_date=request.POST.get('exam_date'),
+            exam_time=request.POST.get('exam_time'),
+            description=request.POST.get('description'),
+        )
+        return redirect('exam_list')
+
+    return render(request, 'examplanner/exam_form.html')
+
+
+@login_required
+def exam_edit(request, pk):
+    if not request.user.is_staff:
+        return redirect('exam_list')
+
+    exam = get_object_or_404(Exam, pk=pk)
+
+    if request.method == "POST":
+        exam.title = request.POST.get('title')
+        exam.subject = request.POST.get('subject')
+        exam.class_name = request.POST.get('class_name')
+        exam.exam_date = request.POST.get('exam_date')
+        exam.exam_time = request.POST.get('exam_time')
+        exam.description = request.POST.get('description')
+        exam.save()
+        return redirect('exam_list')
+
+    return render(request, 'examplanner/exam_form.html', {'exam': exam})
+
+
+@login_required
+def exam_delete(request, pk):
+    if not request.user.is_staff:
+        return redirect('exam_list')
+
+    exam = get_object_or_404(Exam, pk=pk)
+
+    if request.method == "POST":
+        exam.delete()
+        return redirect('exam_list')
+
+    return render(request, 'examplanner/exam_confirm_delete.html', {'exam': exam})
