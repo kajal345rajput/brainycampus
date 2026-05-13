@@ -28,33 +28,47 @@
         {% csrf_token %}
 
         <!-- TITLE -->
-
         <input type="text"
                name="title"
                placeholder="Assignment Title"
                required>
 
 
-        <!-- CLASS -->
-
-        <select name="class_name" required>
+        <!-- COURSE -->
+        <select name="course" required>
 
             <option value="">
-                Select Class
+                Select Course
             </option>
 
-            <option value="CSE-A">CSE-A</option>
-            <option value="CSE-B">CSE-B</option>
-            <option value="BCA-1">BCA-1</option>
-            <option value="BCA-2">BCA-2</option>
-            <option value="MCA: I-Sem">MCA: I-Sem</option>
-            <option value="MCA: II-Sem">MCA: II-Sem</option>
+            <option value="BTECH">B.Tech</option>
+            <option value="BCA">BCA</option>
+            <option value="MCA">MCA</option>
+            <option value="MBA">MBA</option>
+
+        </select>
+
+
+        <!-- SEMESTER -->
+        <select name="semester" required>
+
+            <option value="">
+                Select Semester
+            </option>
+
+            <option value="SEM1">Sem 1</option>
+            <option value="SEM2">Sem 2</option>
+            <option value="SEM3">Sem 3</option>
+            <option value="SEM4">Sem 4</option>
+            <option value="SEM5">Sem 5</option>
+            <option value="SEM6">Sem 6</option>
+            <option value="SEM7">Sem 7</option>
+            <option value="SEM8">Sem 8</option>
 
         </select>
 
 
         <!-- SUBJECT -->
-
         <input type="text"
                name="subject"
                placeholder="Subject Name"
@@ -62,13 +76,11 @@
 
 
         <!-- DESCRIPTION -->
-
         <textarea name="description"
                   placeholder="Assignment Description"></textarea>
 
 
         <!-- LAST DATE -->
-
         <label class="label-text">
             Last Submission Date
         </label>
@@ -79,7 +91,6 @@
 
 
         <!-- PDF -->
-
         <label class="label-text">
             Upload Question PDF
         </label>
@@ -89,7 +100,6 @@
 
 
         <!-- BUTTON -->
-
         <button type="submit">
             Upload Assignment
         </button>
@@ -119,6 +129,21 @@
                 </span>
 
             </div>
+
+
+            <p>
+
+                <strong>Course:</strong>
+                {{ assignment.course }}
+
+            </p>
+
+            <p>
+
+                <strong>Semester:</strong>
+                {{ assignment.semester }}
+
+            </p>
 
 
             <p>

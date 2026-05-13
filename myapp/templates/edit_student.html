@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <h2>Edit Student</h2>
+
+    <form method="POST">
+
+        {% csrf_token %}
+
+        <!-- Username -->
+        <div class="mb-3">
+            <label>Username</label>
+
+            <input type="text"
+                   name="username"
+                   class="form-control"
+                   value="{{ student.user.username }}"
+                   required>
+        </div>
+
+        <!-- Enrollment -->
+        <div class="mb-3">
+            <label>Enrollment Number</label>
+
+            <input type="text"
+                   name="enrollment_no"
+                   class="form-control"
+                   value="{{ student.enrollment_no }}"
+                   required>
+        </div>
+
+        <!-- Course -->
+        <div class="mb-3">
+            <label>Course</label>
+
+            <select name="course"
+                    class="form-control"
+                    required>
+
+                <option value="BTECH"
+                    {% if student.course == 'BTECH' %}selected{% endif %}>
+                    B.Tech
+                </option>
+
+                <option value="BCA"
+                    {% if student.course == 'BCA' %}selected{% endif %}>
+                    BCA
+                </option>
+
+                <option value="MCA"
+                    {% if student.course == 'MCA' %}selected{% endif %}>
+                    MCA
+                </option>
+
+                <option value="MBA"
+                    {% if student.course == 'MBA' %}selected{% endif %}>
+                    MBA
+                </option>
+
+            </select>
+        </div>
+
+        <!-- Semester -->
+        <div class="mb-3">
+            <label>Semester</label>
+
+            <select name="semester"
+                    class="form-control"
+                    required>
+
+                <option value="SEM1"
+                    {% if student.semester == 'SEM1' %}selected{% endif %}>
+                    Sem 1
+                </option>
+
+                <option value="SEM2"
+                    {% if student.semester == 'SEM2' %}selected{% endif %}>
+                    Sem 2
+                </option>
+
+                <option value="SEM3"
+                    {% if student.semester == 'SEM3' %}selected{% endif %}>
+                    Sem 3
+                </option>
+
+                <option value="SEM4"
+                    {% if student.semester == 'SEM4' %}selected{% endif %}>
+                    Sem 4
+                </option>
+
+                <option value="SEM5"
+                    {% if student.semester == 'SEM5' %}selected{% endif %}>
+                    Sem 5
+                </option>
+
+                <option value="SEM6"
+                    {% if student.semester == 'SEM6' %}selected{% endif %}>
+                    Sem 6
+                </option>
+
+                <option value="SEM7"
+                    {% if student.semester == 'SEM7' %}selected{% endif %}>
+                    Sem 7
+                </option>
+
+                <option value="SEM8"
+                    {% if student.semester == 'SEM8' %}selected{% endif %}>
+                    Sem 8
+                </option>
+
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary">
+            Update Student
+        </button>
+
+    </form>
+
+</div>
+
+{% endblock %}

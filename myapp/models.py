@@ -41,10 +41,15 @@ class Attendance(models.Model):
         ('A', 'Absent'),
     ]
 
+    # STUDENT USER (NO CHANGE - SAFE)
     student = models.ForeignKey(
         User,
         on_delete=models.CASCADE
     )
+
+    # NEW: helps filtering without errors
+    course = models.CharField(max_length=10, blank=True, null=True)
+    semester = models.CharField(max_length=10, blank=True, null=True)
 
     class_name = models.CharField(max_length=50)
 
@@ -64,11 +69,35 @@ class Attendance(models.Model):
         related_name='marked_attendance'
     )
 
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-date']
+
     def __str__(self):
         return f"{self.student.username} - {self.subject} - {self.status}"
 
+
 # ================= STUDENT =================
 class Student(models.Model):
+
+    COURSE_CHOICES = [
+        ('BTECH', 'B.Tech'),
+        ('BCA', 'BCA'),
+        ('MCA', 'MCA'),
+        ('MBA', 'MBA'),
+    ]
+
+    SEMESTER_CHOICES = [
+        ('SEM1', 'Sem 1'),
+        ('SEM2', 'Sem 2'),
+        ('SEM3', 'Sem 3'),
+        ('SEM4', 'Sem 4'),
+        ('SEM5', 'Sem 5'),
+        ('SEM6', 'Sem 6'),
+        ('SEM7', 'Sem 7'),
+        ('SEM8', 'Sem 8'),
+    ]
 
     user = models.OneToOneField(
         User,
@@ -77,13 +106,52 @@ class Student(models.Model):
 
     enrollment_no = models.CharField(max_length=50)
 
+    # NEW
+    course = models.CharField(
+        max_length=10,
+        choices=COURSE_CHOICES
+    )
+
+    # NEW
+    semester = models.CharField(
+        max_length=10,
+        choices=SEMESTER_CHOICES
+    )
+
+    # AUTO GENERATED CLASS
     class_name = models.CharField(max_length=50)
+
+    def save(self, *args, **kwargs):
+
+        self.class_name = f"{self.course}-{self.semester}"
+
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.user.username} - {self.class_name}"
 
 # ================= ASSIGNMENT =================
 class Assignment(models.Model):
+
+    # ===== COURSE CHOICES =====
+    COURSE_CHOICES = [
+        ('BTECH', 'B.Tech'),
+        ('BCA', 'BCA'),
+        ('MCA', 'MCA'),
+        ('MBA', 'MBA'),
+    ]
+
+    # ===== SEMESTER CHOICES =====
+    SEMESTER_CHOICES = [
+        ('SEM1', 'Sem 1'),
+        ('SEM2', 'Sem 2'),
+        ('SEM3', 'Sem 3'),
+        ('SEM4', 'Sem 4'),
+        ('SEM5', 'Sem 5'),
+        ('SEM6', 'Sem 6'),
+        ('SEM7', 'Sem 7'),
+        ('SEM8', 'Sem 8'),
+    ]
 
     teacher = models.ForeignKey(
         User,
@@ -94,6 +162,19 @@ class Assignment(models.Model):
 
     title = models.CharField(max_length=200)
 
+    # ===== COURSE =====
+    course = models.CharField(
+        max_length=20,
+        choices=COURSE_CHOICES
+    )
+
+    # ===== SEMESTER =====
+    semester = models.CharField(
+        max_length=10,
+        choices=SEMESTER_CHOICES
+    )
+
+    # ===== CLASS NAME =====
     class_name = models.CharField(max_length=100)
 
     subject = models.CharField(max_length=100)
@@ -122,7 +203,6 @@ class Assignment(models.Model):
         return self.title
 
 
-
 # ================= SUBMISSION =================
 class Submission(models.Model):
 
@@ -146,6 +226,7 @@ class Submission(models.Model):
 
     def __str__(self):
         return f"{self.student.username} - {self.assignment.title}"
+
 
 # ================= NOTES =================
 class Note(models.Model):

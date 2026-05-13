@@ -56,84 +56,94 @@ def logout_view(request):
 def attendance_view(request):
 
     is_teacher = request.user.is_staff
-
-    # SHOW ALL STUDENTS INITIALLY
     students = Student.objects.all()
 
-    # ================= STAFF SIDE =================
+    # ================= STAFF: MARK ATTENDANCE =================
     if request.method == "POST" and is_teacher:
 
-        class_name = request.POST.get('class_name')
+        course = request.POST.get('course')
+        semester = request.POST.get('semester')
         subject = request.POST.get('subject')
         date = request.POST.get('date')
 
-        # LOAD ONLY SELECTED CLASS STUDENTS
-        students = Student.objects.filter(
-            class_name=class_name
+        class_name = f"{course}-{semester}"
+
+        filtered_students = Student.objects.filter(
+            course=course,
+            semester=semester
         )
 
-        # SAVE ATTENDANCE
-        for student in students:
+        for student in filtered_students:
 
-            status = request.POST.get(
-                f'student_{student.user.id}'
-            )
+            status = request.POST.get(f'student_{student.user.id}')
 
-            # SAVE ONLY IF PRESENT/ABSENT SELECTED
             if status:
 
-                Attendance.objects.create(
+                # ❗ PREVENT DUPLICATE ENTRY (IMPORTANT FIX)
+                already_exists = Attendance.objects.filter(
                     student=student.user,
-                    class_name=class_name,
                     subject=subject,
-                    date=date,
-                    status=status,
-                    marked_by=request.user
-                )
+                    date=date
+                ).exists()
+
+                if not already_exists:
+                    Attendance.objects.create(
+                        student=student.user,
+                        course=course,
+                        semester=semester,
+                        class_name=class_name,
+                        subject=subject,
+                        date=date,
+                        status=status,
+                        marked_by=request.user
+                    )
 
         return redirect('attendance')
 
     # ================= TEACHER VIEW =================
     if is_teacher:
 
-        records = Attendance.objects.all().order_by('-date')
+        records = Attendance.objects.all().order_by('-date', '-id')
 
-        total_classes = 0
-        present_count = 0
-        percentage = 0
+        total_classes = Attendance.objects.values(
+            'class_name', 'subject', 'date'
+        ).distinct().count()
+
+        present_count = Attendance.objects.filter(status='P').count()
+
+        percentage = round(
+            (present_count / Attendance.objects.count()) * 100, 2
+        ) if Attendance.objects.exists() else 0
 
     # ================= STUDENT VIEW =================
     else:
 
         records = Attendance.objects.filter(
             student=request.user
-        ).order_by('-date')
+        ).order_by('-date', '-id')
 
-        total_classes = records.count()
+        total_classes = Attendance.objects.filter(
+            student=request.user
+        ).values('class_name', 'subject', 'date').distinct().count()
 
-        present_count = records.filter(
+        present_count = Attendance.objects.filter(
+            student=request.user,
             status='P'
         ).count()
 
-        percentage = (
-            round((present_count / total_classes) * 100, 2)
-            if total_classes > 0 else 0
-        )
+        percentage = round(
+            (present_count / Attendance.objects.filter(student=request.user).count()) * 100, 2
+        ) if Attendance.objects.filter(student=request.user).exists() else 0
 
     return render(request, 'attendance.html', {
-
         'is_teacher': is_teacher,
-
         'students': students,
-
         'records': records,
-
         'total_classes': total_classes,
-
         'present_count': present_count,
-
         'percentage': percentage,
     })
+
 # ================= NOTES =================
 
 @login_required
@@ -172,6 +182,7 @@ def delete_note(request, id):
     return redirect('notes')
 
 # ================= ASSIGNMENT PAGE =================
+# ================= ASSIGNMENT PAGE =================
 @login_required
 def assignment_view(request):
 
@@ -183,7 +194,14 @@ def assignment_view(request):
         if request.method == "POST":
 
             title = request.POST.get('title')
-            class_name = request.POST.get('class_name')
+
+            # NEW FIELDS
+            course = request.POST.get('course')
+            semester = request.POST.get('semester')
+
+            # AUTO CREATE CLASS NAME
+            class_name = f"{course}-{semester}"
+
             subject = request.POST.get('subject')
             description = request.POST.get('description')
             due_date = request.POST.get('due_date')
@@ -193,6 +211,8 @@ def assignment_view(request):
             Assignment.objects.create(
                 teacher=request.user,
                 title=title,
+                course=course,
+                semester=semester,
                 class_name=class_name,
                 subject=subject,
                 description=description,
@@ -217,7 +237,6 @@ def assignment_view(request):
         'assignments': assignments,
         'is_teacher': is_teacher
     })
-
 
 
 # ================= SUBMIT ASSIGNMENT =================
@@ -246,7 +265,6 @@ def submit_assignment(request, assignment_id):
     return redirect('assignment')
 
 
-
 # ================= VIEW SUBMISSIONS =================
 @login_required
 def view_submissions(request, assignment_id):
@@ -264,7 +282,6 @@ def view_submissions(request, assignment_id):
         'assignment': assignment,
         'submissions': submissions
     })
-
 
 
 # ================= DELETE ASSIGNMENT =================
@@ -380,6 +397,8 @@ def add_student(request):
         Student.objects.create(
             user=user,
             enrollment_no=enrollment_no,
+            course=course,
+            semester=semester,
             class_name=class_name
         )
 
@@ -432,6 +451,11 @@ def edit_student(request, pk):
 
         # UPDATE STUDENT
         student.enrollment_no = enrollment_no
+
+        # SAVE COURSE + SEMESTER
+        student.course = course
+        student.semester = semester
+
         student.class_name = class_name
 
         student.save()
@@ -524,26 +548,35 @@ def exam_delete(request, pk):
 
 # ================= NOTEBOOK VIEW =================
 
+# ================= NOTEBOOK VIEW =================
+
 @login_required
 def notebook_view(request):
 
     user = request.user
 
-    # 👨‍🎓 STUDENT → ONLY THEIR COURSE + SEMESTER MATERIAL
+    # ================= STUDENT VIEW =================
     if not user.is_staff:
-        try:
-            student = user.student
 
+        try:
+            # GET STUDENT PROFILE
+            student = Student.objects.get(user=user)
+
+            # FILTER MATERIALS BY COURSE + SEMESTER
             materials = StudyMaterial.objects.filter(
                 course=student.course,
                 semester=student.semester
             ).order_by('-created_at')
 
-        except:
+        except Student.DoesNotExist:
+
+            # IF STUDENT PROFILE NOT FOUND
             materials = StudyMaterial.objects.none()
 
-    # TEACHER : ONLY THEIR UPLOADED MATERIAL
+    # ================= TEACHER VIEW =================
     else:
+
+        # SHOW ONLY THEIR UPLOADED MATERIALS
         materials = StudyMaterial.objects.filter(
             uploaded_by=user
         ).order_by('-created_at')
@@ -554,6 +587,7 @@ def notebook_view(request):
 
 
 # ================= UPLOAD MATERIAL =================
+
 @login_required
 def upload_material(request):
 
@@ -562,15 +596,25 @@ def upload_material(request):
         return redirect('notebook')
 
     if request.method == 'POST':
-        form = StudyMaterialForm(request.POST, request.FILES)
+
+        form = StudyMaterialForm(
+            request.POST,
+            request.FILES
+        )
 
         if form.is_valid():
+
             material = form.save(commit=False)
+
+            # SAVE TEACHER
             material.uploaded_by = request.user
+
             material.save()
+
             return redirect('notebook')
 
     else:
+
         form = StudyMaterialForm()
 
     return render(request, 'upload_material.html', {
@@ -579,16 +623,21 @@ def upload_material(request):
 
 
 # ================= DELETE MATERIAL =================
+
 @login_required
 def delete_material(request, pk):
 
-    material = get_object_or_404(StudyMaterial, id=pk)
+    material = get_object_or_404(
+        StudyMaterial,
+        id=pk
+    )
 
     # ONLY OWNER TEACHER CAN DELETE
     if request.user != material.uploaded_by:
         return redirect('notebook')
 
     material.delete()
+
     return redirect('notebook')
 
 #===============EVENTS===================#
