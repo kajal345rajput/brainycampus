@@ -9,9 +9,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-development-secret-key'
 
 DEBUG = False
-
 ALLOWED_HOSTS = ["*"]
-
 
 # Installed Apps
 INSTALLED_APPS = [
